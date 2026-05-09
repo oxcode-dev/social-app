@@ -10,107 +10,95 @@ interface RequestWithUser extends express.Request {
 }
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
-    try {
-        const auth = req.user
-        const user = await User.findById(auth?.id).select('-password')
+    const auth = req.user
+    const user = await User.findById(auth?.id).select('-password')
 
-         if (!user) {
-            res.status(400).json({ msg: "User does not exist." });
-        }
-
-        let data = {
-            status: "success",
-            message: "Profile retrieved successfully",
-            user: {
-                id: user?.id,
-                fullName: user?.first_name + ' ' + user?.last_name,
-                email: user?.email,
-                first_name: user?.first_name,
-                last_name: user?.last_name,
-                username: user?.username,
-                avatar: user?.avatar,
-                bio: user?.bio,
-                // posts: user?.posts || [],
-                // saved: user?.saved || [],
-                // followers: user?.followers || [],
-                // followings: user?.followings || [],
-            },
-        }
-
-        res.status(200).json(data);
-    } catch(error) {
-        return res.status(500).json({ message: `server error: ${error}`})
+        if (!user) {
+        res.status(400).json({ msg: "User does not exist." });
     }
+
+    let data = {
+        status: "success",
+        message: "Profile retrieved successfully",
+        user: {
+            id: user?.id,
+            fullName: user?.first_name + ' ' + user?.last_name,
+            email: user?.email,
+            first_name: user?.first_name,
+            last_name: user?.last_name,
+            username: user?.username,
+            avatar: user?.avatar,
+            bio: user?.bio,
+            // posts: user?.posts || [],
+            // saved: user?.saved || [],
+            // followers: user?.followers || [],
+            // followings: user?.followings || [],
+        },
+    }
+
+    res.status(200).json(data);
 }
 
 export const updateUserDetails = async (req: RequestWithUser, res: express.Response) => {
-    try {
-        const auth = req.user
-        const user = await User.findById(auth?.id)
+    const auth = req.user
+    const user = await User.findById(auth?.id)
 
-        if(!user) {
-            return res.status(404).json({ message: 'User not found' })
-        }
-
-        const { first_name, last_name, email, bio, username } = req.body;
-
-        if(
-            !first_name || !last_name || !email || !username
-        ) {
-            return res.status(400).json({
-                message: "Required fields are missing!",
-            })
-        }
-
-        if(first_name) user.first_name = first_name;
-        if(last_name) user.last_name = last_name;
-        if(email) user.email = email;
-        if(username) user.username = username;
-        if(bio) user.bio = bio;
-
-        await user.save();
-
-        let data = {
-            user,
-            status: "success",
-            message: "Profile updated successfully",
-        };
-        res.status(201).json(data);
-    } catch(error) {
-        return res.status(500).json({ message: `server error: ${error}`})
+    if(!user) {
+        return res.status(404).json({ message: 'User not found' })
     }
+
+    const { first_name, last_name, email, bio, username } = req.body;
+
+    if(
+        !first_name || !last_name || !email || !username
+    ) {
+        return res.status(400).json({
+            message: "Required fields are missing!",
+        })
+    }
+
+    if(first_name) user.first_name = first_name;
+    if(last_name) user.last_name = last_name;
+    if(email) user.email = email;
+    if(username) user.username = username;
+    if(bio) user.bio = bio;
+
+    await user.save();
+
+    let data = {
+        user,
+        status: "success",
+        message: "Profile updated successfully",
+    };
+    res.status(201).json(data);
 }
 
 export const changePassword = async (req: RequestWithUser, res: express.Response) => {
-    try {
-        const auth = req.user
-        const user = await User.findById(auth?.id)
+    const auth = req.user
+    const user = await User.findById(auth?.id)
 
-        if(!user) {
-            return res.status(404).json({ message: 'User not found' })
-        }
-        
-        const { password, confirm_password } = req.body;
-
-        if(!password || !confirm_password) {
-            return res.status(400).json({ message: 'Password fields are required' })
-        }
-
-        if(password !== confirm_password) {
-            return res.status(400).json({ message: 'Passwords do not match' })
-        }
-
-        user.password = await bcrypt.hash(password, 12);
-        await user.save();
-
-        let data = {
-            status: "success",
-            message: "Password changed successfully",
-        };
-        res.status(201).json(data);
-    } catch(error) {
-        return res.status(500).json({ message: 'server error'})
+    if(!user) {
+        return res.status(404).json({ message: 'User not found' })
     }
+    
+    const { password, confirm_password } = req.body;
+
+    if(!password || !confirm_password) {
+        return res.status(400).json({ message: 'Password fields are required' })
+    }
+
+    if(password !== confirm_password) {
+        return res.status(400).json({ message: 'Passwords do not match' })
+    }
+
+    user.password = await bcrypt.hash(password, 12);
+    await user.save();
+
+    let data = {
+        status: "success",
+        message: "Password changed successfully",
+    };
+    res.status(201).json(data);
 }
 
 export const deleteProfile = async (req: RequestWithUser, res: express.Response) => {
