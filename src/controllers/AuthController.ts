@@ -2,8 +2,9 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user.ts';
+import { fetchUserByEmail, storeUser } from '../services/userServices.ts';
+import { createToken, setTokenCookie } from '../utils/jwt.ts';
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 const MONTH = 30 * 24 * 60 * 60; // in seconds
 
 // Router for user registration
@@ -11,7 +12,7 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 
     const { email, password, first_name, last_name, username } = req.body;
 
-    const userExists = await User.findOne({ email });
+    const userExists = await fetchUserByEmail(email);
 
     if(userExists) {
         return res.status(400).json({ message: 'User already exists' });
@@ -19,15 +20,13 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = new User({
+    const savedUser = await storeUser({
         email,
         password: hashedPassword,
         first_name,
         last_name,
         username,
-    })
-
-    const savedUser = await newUser.save();
+    });
 
     const payload = { 
         id: savedUser._id,
@@ -35,16 +34,9 @@ export const userRegistration = async (req: express.Request, res: express.Respon
     }
 
     const token = createToken(payload);
-    // const refresh_token = createToken(payload, MONTH);
+    const refresh_token = createToken(payload, MONTH);
 
-    // res.cookie("refreshtoken", token, {
-    res.cookie("token", token, {
-        httpOnly: true,
-        path: "/api/token",
-        // path: "/api/refresh_token",
-        sameSite: 'lax',
-        maxAge: 30 * 24 * 60 * 60 * 1000, //validity of 30 days
-    });
+    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH);
 
     return res.status(201).json({
         token, 
@@ -151,17 +143,4 @@ export const refreshToken = async (req: express.Request, res: express.Response) 
 
     // res.json({ access_token });
 
-}
-
-type PayloadType = {
-    id: string;
-    email: string;
-}
-
-const createToken = (payload: PayloadType, expiresIn: number = 3600*24) => {
-    return jwt.sign(
-        payload,
-        JWT_SECRET,
-        { expiresIn: expiresIn},
-    );
 }

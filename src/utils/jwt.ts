@@ -8,7 +8,7 @@ type PayloadType = {
     email: string;
 }
 
-export const createToken = (payload: PayloadType, res: express.Response, tokenName: string, expiresIn: number = 3600*24) => {
+export const createToken = (payload: PayloadType, expiresIn: number = 3600*24) => {
     return jwt.sign(
         payload,
         JWT_SECRET,

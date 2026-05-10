@@ -1,21 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-// import { IUser } from "../types/index.ts";
-
-export interface IUser {
-  _id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  username: string;
-  avatar?: string | null;
-  bio?: string | null;
-  posts:  mongoose.Schema.Types.ObjectId[];
-  saved: mongoose.Schema.Types.ObjectId[];
-  followers: mongoose.Schema.Types.ObjectId[];
-  followings: mongoose.Schema.Types.ObjectId[];
-}
-
+import type { IUser } from "../types/index.ts";
 
 const userSchema = new Schema<IUser>({
     email: {
