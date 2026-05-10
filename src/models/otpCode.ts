@@ -4,7 +4,7 @@ import mongoose, { Schema } from "mongoose";
 export interface IOtpCode {
   _id: string;
   email: string;
-  code: string;
+  code: number;
   expires_at: Date;
 }
 
@@ -15,7 +15,7 @@ const otpCodeSchema = new Schema<IOtpCode>({
         unique: true,
     },
     code: {
-        type: String,
+        type: Number,
         required: true,
         length: 4,
     },

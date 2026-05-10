@@ -4,19 +4,19 @@ import { OtpCode } from '../models/otpCode.ts';
 import { sendMail } from '../helpers/mailer.ts';
 import bcrypt from 'bcryptjs';
 import { generatePin } from '../helpers/index.ts';
-
-const EMAIL_SMTP_USERNAME = process.env.EMAIL_SMTP_USERNAME as string;
-const CLIENT_URL = process.env.CLIENT_URL as string
+import { PasswordResetMail } from '../config/mails.ts';
+import { fetchUserByEmail } from '../services/userServices.ts';
+import { deleteOtpCodeByEmail, storeOtpCode } from '../services/otpCodeService.ts';
 
 export const forgotPassword = async (req: express.Request, res: express.Response) => {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await fetchUserByEmail(email);
 
     if(!user) {
         return res.status(400).json({ message: 'User not found!' });
     }
 
-    await OtpCode.deleteMany({ email: user.email });
+    await deleteOtpCodeByEmail(user.email)
 
     const newOtpCodeDetails = {
         code: generatePin(4),
@@ -24,20 +24,11 @@ export const forgotPassword = async (req: express.Request, res: express.Response
         expires_at: new Date(Date.now() + 15 * 60 * 1000) // OTP expires in 15 minutes
     }
 
-    const otpCode = await OtpCode.create(newOtpCodeDetails);
+    const otpCode = await storeOtpCode(newOtpCodeDetails);
 
-    await sendMail(
-        EMAIL_SMTP_USERNAME,
-        user.email,
-        // 'mrexcelsam1@gmail.com',
-        "Password Reset OTP",
-        `<p>Your account with email ${user.email} has been requested for password reset.</p>
-        <p>Your OTP is: <b>${otpCode.code}</b></p>
-        <p>Thank you for using our application!</p>
-        <p><a href="${CLIENT_URL}/reset-password">Click here to reset your password</a></p>`
-    );
+    await PasswordResetMail(user.email, otpCode.code);
 
-        let data = {
+    let data = {
         status: "success",
         message: "Password reset OTP sent successfully! Please check your email.",
     }

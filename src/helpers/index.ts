@@ -18,5 +18,5 @@ export function generatePin($digits = 4) {
         i++;
     }
 
-    return pin;
+    return parseInt(pin) as number;
 }
