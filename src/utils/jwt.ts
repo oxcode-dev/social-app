@@ -2,6 +2,8 @@
 import jwt from "jsonwebtoken";
 import { isDevelopment, JWT_SECRET } from "../config/index.ts";
 import express from "express";
+import * as cookie from 'cookie';
+
 
 type PayloadType = {
     id: string;
@@ -27,6 +29,19 @@ export const setTokenCookie = (token: string, res: express.Response, tokenName: 
         sameSite: "strict", // CSRF attacks cross-site request forgery attacks
         secure: !isDevelopment,
     });
+
+    res.setHeader(
+        "Set-Cookie",
+        cookie.stringifySetCookie({
+            name: tokenName,
+            value: token,
+            httpOnly: true,
+            maxAge: expiresIn,
+            sameSite: "strict"
+
+            // maxAge: 30 * 24 * 60 * 60 * 1000, //validity of 30 days
+        }),
+    );
 }
 
 export const clearTokenCookie = (res: express.Response, tokenName: string) => {

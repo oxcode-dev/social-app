@@ -70,7 +70,7 @@ export const userLogin = async (req: express.Request, res: express.Response) => 
         email: user.email,
     }
 
-    const token = createToken(payload);
+    const token = createToken(payload, MONTH);
     const refresh_token = createToken(payload, MONTH);
 
     setTokenCookie(refresh_token, res, 'refreshtoken', MONTH * 1000);
@@ -102,7 +102,7 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
 export const refreshToken = async (req: express.Request, res: express.Response) => {
     const refresh_token = req.cookies['refreshtoken']
     console.log("Received refresh token: ", refresh_token);
-    console.log('All Cookies:', req.cookies);
+    console.log('All Cookies:', JSON.stringify(req.cookies));
     
     if (!refresh_token) {
         return res.status(400).json({ msg: "Please login again." });
