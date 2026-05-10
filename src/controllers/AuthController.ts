@@ -1,13 +1,11 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/user.ts';
 import { fetchUserByEmail, storeUser } from '../services/userServices.ts';
-import { createToken, setTokenCookie } from '../utils/jwt.ts';
+import { clearTokenCookie, createToken, setTokenCookie } from '../utils/jwt.ts';
 
 const MONTH = 30 * 24 * 60 * 60; // in seconds
 
-// Router for user registration
 export const userRegistration = async (req: express.Request, res: express.Response) => {
 
     const { email, password, first_name, last_name, username } = req.body;
@@ -53,10 +51,10 @@ export const userRegistration = async (req: express.Request, res: express.Respon
     });
 }
 
-// Router for user login
 export const userLogin = async (req: express.Request, res: express.Response) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+
+    const user = await fetchUserByEmail(email);
 
     if(!user) {
         return res.status(400).json({ message: 'User not found' });
@@ -74,21 +72,9 @@ export const userLogin = async (req: express.Request, res: express.Response) => 
     }
 
     const token = createToken(payload);
-    // const refresh_token = createToken(payload, MONTH);
+    const refresh_token = createToken(payload, MONTH);
 
-    // res.cookie("refreshtoken", refresh_token, {
-    //     httpOnly: true,
-    //     path: "/api/refresh_token",
-    //     sameSite: 'lax',
-    //     maxAge: 30 * 24 * 60 * 60 * 1000, //validity of 30 days
-    // });
-    res.cookie("token", token, {
-        httpOnly: true,
-        path: "/api/token",
-        // path: "/api/refresh_token",
-        sameSite: 'lax',
-        maxAge: 30 * 24 * 60 * 60 * 1000, //validity of 30 days
-    });
+    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH);
     
     return res.status(201).json({
         token,
@@ -106,14 +92,10 @@ export const userLogin = async (req: express.Request, res: express.Response) => 
 }
 
 export const userLogout = async (req: express.Request, res: express.Response) => {
-    // Clearing JWT cookie
-    // res.cookie("token", "", { maxAge: 0 });
-    res.cookie("token", "", {
-        httpOnly: true, // Important for security
-        expires: new Date(Date.now()), // Set expiration to the current time or past
-        // secure: process.env.NODE_ENV === "production" // Use secure in production
-    });
-    res.clearCookie("refreshtoken", { path: "/api/refresh_token" });
+    
+    setTokenCookie('', res, 'refreshtoken', 0);
+    clearTokenCookie(res, 'refreshtoken');
+    
     // Sending success response
     res.status(201).json({ message: "Logged out successfully" });
 };

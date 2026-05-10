@@ -24,3 +24,7 @@ export const setTokenCookie = (token: string, res: express.Response, tokenName: 
         secure: !isDevelopment,
     });
 }
+
+export const clearTokenCookie = (res: express.Response, tokenName: string) => {
+    res.clearCookie(tokenName, { path: "/api/auth/logout" });
+}
