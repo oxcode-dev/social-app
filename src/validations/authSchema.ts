@@ -24,11 +24,11 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
     otp: z.string()
-        .min(6, { message: "Password must be at least 6 characters long" })
+        .min(4, { message: "OTP code must be at least 4 characters long" }),
+    new_password: z.string().min(6, { message: "Password must be at least 6 characters long" })
         .regex(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
             "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
         ),
-    new_password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
     email: z.string().email({ message: "Invalid email address" }).trim().toLowerCase(),
 })

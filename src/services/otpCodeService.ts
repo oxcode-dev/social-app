@@ -2,8 +2,8 @@
 
 import { type IOtpCode, OtpCode } from "../models/otpCode.ts";
 
-export const fetchOtpCodeByEmail = async (email: string) => {
-    return await OtpCode.findOne({ email });
+export const fetchOtpCodeByEmailAndOtp = async (email: string, otp: number) => {
+    return await OtpCode.findOne({ email, code: otp } );
 };
 
 export const destroyOtpCode = async (): Promise<any> => {

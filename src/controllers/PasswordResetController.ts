@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import { generatePin } from '../helpers/index.ts';
 import { PasswordResetMail } from '../config/mails.ts';
 import { fetchUserByEmail } from '../services/userServices.ts';
-import { deleteOtpCodeByEmail, storeOtpCode } from '../services/otpCodeService.ts';
+import { deleteOtpCodeByEmail, fetchOtpCodeByEmailAndOtp, storeOtpCode } from '../services/otpCodeService.ts';
 
 export const forgotPassword = async (req: express.Request, res: express.Response) => {
     const { email } = req.body;
@@ -16,7 +16,7 @@ export const forgotPassword = async (req: express.Request, res: express.Response
         return res.status(400).json({ message: 'User not found!' });
     }
 
-    await deleteOtpCodeByEmail(user.email)
+    await deleteOtpCodeByEmail(user.email);
 
     const newOtpCodeDetails = {
         code: generatePin(4),
@@ -37,18 +37,15 @@ export const forgotPassword = async (req: express.Request, res: express.Response
 }
 
 export const resetPassword = async (req: express.Request, res: express.Response) => {
-    const { email, otp, new_password } = req.body;
-    const user = await User.findOne({ email });
+    const { email, otp, new_password } = req.body as { email: string, otp: number, new_password: string };
+
+    const user = await fetchUserByEmail(email);
 
     if(!user) {
         return res.status(400).json({ message: 'User not found' });
     }
 
-    if(!otp || !new_password || !email) {
-        return res.status(400).json({ message: "Required fields are missing!" });
-    }
-
-    const otpCode = await OtpCode.findOne({ email, code: otp });
+    const otpCode = await fetchOtpCodeByEmailAndOtp(email, otp);
 
     if(!otpCode) {
         return res.status(400).json({ message: "Invalid OTP" });
@@ -62,7 +59,7 @@ export const resetPassword = async (req: express.Request, res: express.Response)
     user.password = hashedPassword;
     await user.save();
 
-    await OtpCode.deleteMany({ email: user.email });
+    await deleteOtpCodeByEmail(user.email);
 
     let data = {
         status: "success",
