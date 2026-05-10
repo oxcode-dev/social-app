@@ -16,8 +16,6 @@ export interface DataStoredInToken {
 const auth = async (req: any, res: express.Response, next: express.NextFunction)  => {
     const authHeader = req.headers['authorization'];
 
-    console.log(authHeader)
-
     if(!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Kindly login to access this resource' });
     }

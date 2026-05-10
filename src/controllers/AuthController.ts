@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { fetchUserByEmail, fetchUserById, storeUser } from '../services/userServices.ts';
+import { fetchUserByEmail, fetchUserByEmailForAuth, fetchUserById, storeUser } from '../services/userServices.ts';
 import { clearTokenCookie, createToken, setTokenCookie, verifyToken } from '../utils/jwt.ts';
 
 const MONTH = 30 * 24 * 60 * 60; // in seconds
@@ -33,7 +33,7 @@ export const userRegistration = async (req: express.Request, res: express.Respon
     const token = createToken(payload);
     const refresh_token = createToken(payload, MONTH);
 
-    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH);
+    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH * 1000);
 
     return res.status(201).json({
         token, 
@@ -53,7 +53,7 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 export const userLogin = async (req: express.Request, res: express.Response) => {
     const { email, password } = req.body;
 
-    const user = await fetchUserByEmail(email);
+    const user = await fetchUserByEmailForAuth(email)
 
     if(!user) {
         return res.status(400).json({ message: 'User not found' });
@@ -73,7 +73,7 @@ export const userLogin = async (req: express.Request, res: express.Response) => 
     const token = createToken(payload);
     const refresh_token = createToken(payload, MONTH);
 
-    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH);
+    setTokenCookie(refresh_token, res, 'refreshtoken', MONTH * 1000);
     
     return res.status(201).json({
         token,
@@ -102,6 +102,7 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
 export const refreshToken = async (req: express.Request, res: express.Response) => {
     const refresh_token = req.cookies['refreshtoken']
     console.log("Received refresh token: ", refresh_token);
+    console.log('All Cookies:', req.cookies);
     
     if (!refresh_token) {
         return res.status(400).json({ msg: "Please login again." });
