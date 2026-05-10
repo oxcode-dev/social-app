@@ -16,6 +16,10 @@ export const createToken = (payload: PayloadType, expiresIn: number = 3600*24) =
     );
 }
 
+export const verifyToken = (token: string) => {
+    return jwt.verify(token, JWT_SECRET) as PayloadType;
+}
+
 export const setTokenCookie = (token: string, res: express.Response, tokenName: string, expiresIn: number = 15 * 24 * 60 * 60 * 1000) => {
     res.cookie(tokenName, token, {
         maxAge: expiresIn,

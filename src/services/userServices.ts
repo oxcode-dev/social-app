@@ -6,6 +6,10 @@ export const fetchUserByEmail = async (email: string) => {
     return await User.findOne({ email });
 }
 
+export const fetchUserById = async (id: string) => {
+    return await User.findById(id);
+}
+
 export const storeUser = async (user: Omit<IUser, '_id' | 'id' |'posts' | 'saved' | 'followers' | 'followings'>) => {
 
     const newUser = new User(user);

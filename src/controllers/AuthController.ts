@@ -1,8 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user.ts';
-import { fetchUserByEmail, storeUser } from '../services/userServices.ts';
-import { clearTokenCookie, createToken, setTokenCookie } from '../utils/jwt.ts';
+import { fetchUserByEmail, fetchUserById, storeUser } from '../services/userServices.ts';
+import { clearTokenCookie, createToken, setTokenCookie, verifyToken } from '../utils/jwt.ts';
 
 const MONTH = 30 * 24 * 60 * 60; // in seconds
 
@@ -95,34 +94,34 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
     
     setTokenCookie('', res, 'refreshtoken', 0);
     clearTokenCookie(res, 'refreshtoken');
-    
+
     // Sending success response
     res.status(201).json({ message: "Logged out successfully" });
 };
 
 export const refreshToken = async (req: express.Request, res: express.Response) => {
-    // const refresh_token = req.cookies['refreshtoken']
+    const refresh_token = req.cookies['refreshtoken']
     
-    // if (!refresh_token) {
-    //     return res.status(400).json({ msg: "Please login again." });
-    // }
+    if (!refresh_token) {
+        return res.status(400).json({ msg: "Please login again." });
+    }
 
     // const result = jwt.verify(refresh_token, JWT_SECRET) as PayloadType;
+    const result = verifyToken(refresh_token)
 
-    // const user = await fetchUser(result?.id);
+    const user = await fetchUserById(result?.id);
 
-    // if (!user) {
-    //     return res.status(400).json({ msg: "User does not exist." });
-    // }
+    if (!user) {
+        return res.status(400).json({ msg: "User does not exist." });
+    }
 
-    // const payload = { 
-    //     id: user?.id,
-    //     email: user?.email,
-    //     role: user?.role,
-    // }
+    const payload = { 
+        id: user?.id,
+        email: user?.email,
+    }
 
-    // const access_token = createToken(payload);
+    const access_token = createToken(payload);
 
-    // res.json({ access_token });
+    res.json({ access_token });
 
 }
