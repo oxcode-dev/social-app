@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { 
+    refreshToken,
     userLogin, 
     userLogout, 
     userRegistration 
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post('/register', validateInputData(registerSchema), userRegistration);
 router.post('/login', validateInputData(loginSchema), userLogin);
+router.post('/refresh-token', auth, refreshToken);
 router.delete('/logout', auth, userLogout);
 
 export { router as authRouter };
