@@ -9,18 +9,18 @@ type PayloadType = {
 }
 
 export const createToken = (payload: PayloadType, res: express.Response, tokenName: string, expiresIn: number = 3600*24) => {
-    const token = jwt.sign(
+    return jwt.sign(
         payload,
         JWT_SECRET,
         { expiresIn: expiresIn},
     );
+}
 
+export const setTokenCookie = (token: string, res: express.Response, tokenName: string, expiresIn: number = 15 * 24 * 60 * 60 * 1000) => {
     res.cookie(tokenName, token, {
-        maxAge: 15 * 24 * 60 * 60 * 1000, //MS
+        maxAge: expiresIn,
         httpOnly: true, // prevent XSS attacks cross-site scripting attacks
         sameSite: "strict", // CSRF attacks cross-site request forgery attacks
         secure: !isDevelopment,
     });
-
-    return token;
 }

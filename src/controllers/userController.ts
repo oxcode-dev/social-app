@@ -3,7 +3,7 @@ import { User } from '../models/user.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
     // const auth = req?.user;
-    const users = await User.find().select('-password');
+    const users = await User.find()//.select('-password');
 
     let data = {
         users,
