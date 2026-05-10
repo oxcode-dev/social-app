@@ -11,11 +11,6 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 
     const { email, password, first_name, last_name, username } = req.body;
 
-    if(!first_name || !last_name || !email || !username || !password || password.length < 6) {
-        return res.status(400).json({
-            message: "Required fields are missing!",
-        })
-    }
     const userExists = await User.findOne({ email });
 
     if(userExists) {
@@ -130,6 +125,33 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
     // Sending success response
     res.status(201).json({ message: "Logged out successfully" });
 };
+
+export const refreshToken = async (req: express.Request, res: express.Response) => {
+    // const refresh_token = req.cookies['refreshtoken']
+    
+    // if (!refresh_token) {
+    //     return res.status(400).json({ msg: "Please login again." });
+    // }
+
+    // const result = jwt.verify(refresh_token, JWT_SECRET) as PayloadType;
+
+    // const user = await fetchUser(result?.id);
+
+    // if (!user) {
+    //     return res.status(400).json({ msg: "User does not exist." });
+    // }
+
+    // const payload = { 
+    //     id: user?.id,
+    //     email: user?.email,
+    //     role: user?.role,
+    // }
+
+    // const access_token = createToken(payload);
+
+    // res.json({ access_token });
+
+}
 
 type PayloadType = {
     id: string;
