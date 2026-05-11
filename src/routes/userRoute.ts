@@ -1,13 +1,14 @@
 import express from 'express';
 import { followUser, getAllUsers, getSuggestedUsers, getUserDetails, getUserFollowers, getUserFollowings, unfollowUser } from '../controllers/userController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
+import { handlePagination } from '../middlewares/handlePagination.ts';
 
 const router = express.Router();
 
 router.route('/')
     .get(getAllUsers)
 
-router.get("/suggestions", auth, getSuggestedUsers);
+router.get("/suggestions", auth, handlePagination as any, getSuggestedUsers);
 
 router.put('/:id/follow', auth, followUser)
 

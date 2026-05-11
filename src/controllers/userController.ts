@@ -1,5 +1,6 @@
 import express from 'express';
 import { User } from '../models/user.ts';
+import { type PaginationType } from '../types/index.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
     // const auth = req?.user;
@@ -143,32 +144,23 @@ export const getUserFollowings = async (req: any, res: express.Response) => {
 
 export const getSuggestedUsers = async (req: any, res: express.Response) => {
 
-    const newArr = [...req.user.followings, req.user._id];
+    const { page, limit, skip } = req as PaginationType;
 
-    const users = await User.aggregate([
-        { $match: { _id: { $nin: newArr } } },
-        {
-            $lookup: {
-                from: "users",
-                localField: "followers",
-                foreignField: "_id",
-                as: "followers",
-            },
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "followings",
-                foreignField: "_id",
-                as: "followings",
-            },
-        },
-    ]).project("-password");
+    const excludedUsers = [...req.user.followings, req.user._id];
+
+    const users = await User.find({
+            _id: { $nin: excludedUsers },
+        })
+        .select("first_name last_name username email avatar bio")
+        .sort({ followersCount: -1 })
+        .skip(skip)
+        .limit(limit);
 
     return res.json({
+        // users,
+        // result: users.length,
+        // excludedUsers,
         users,
-        result: users.length,
-        newArr,
     });
     
 }
