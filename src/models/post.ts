@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 interface IPost {
     caption: string;
     image: string;
-    postedBy: mongoose.Schema.Types.ObjectId;
+    postedBy: string | mongoose.Schema.Types.ObjectId;
     likes: mongoose.Schema.Types.ObjectId[];
     comments: {
         user: mongoose.Schema.Types.ObjectId;

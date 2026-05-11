@@ -10,13 +10,14 @@ export interface IUser {
     username: string;
     avatar?: string | null;
     bio?: string | null;
-    posts:  string[]; // Assuming these are post IDs
+    id: string;
     saved: string[]; // Assuming these are post IDs
     followers: string[]; // Assuming these are user IDs
     followings: string[]; // Assuming these are user IDs
 }
 
 export interface AuthUserType {
+    _id: string;
     id: string;
     first_name: string;
     last_name: string;
@@ -37,7 +38,7 @@ export interface DataStoredInToken {
 }
 
 export interface RequestWithUser extends express.Request {
-    user: Pick<AuthUserType, 'id' | 'email'>
+    user: Pick<AuthUserType, 'id' | 'email' | '_id'>
 }
 
 export type PaginationType = {

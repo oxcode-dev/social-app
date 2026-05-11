@@ -33,12 +33,6 @@ const userSchema = new Schema<IUser>({
         type: String,
         default: "Hi👋 Welcome To My Profile"
     },
-    posts: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Post",
-        }
-    ],
     saved: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.route('/')
     .get(auth, getPosts as any)
-    .post(auth, validateInputData(postDetailsSchema), createPost);
+    .post(auth, validateInputData(postDetailsSchema), createPost as any);
 
 router.route('/:id')
     .get(auth, getPost)

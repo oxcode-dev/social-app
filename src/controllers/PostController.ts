@@ -3,16 +3,16 @@ import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
 
-export const createPost = async (req: any, res: express.Response) => {
+export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
 
-    const requestData = {
-        caption: req.body.caption as string,
-        image: req.body.image as string,
-        postedBy: auth.id
-    }
+    const { caption, image } = req.body as { caption: string, image: string}
 
-    const newPost = await Post.create(requestData);
+    const newPost = await Post.create({
+        caption,
+        image,
+        postedBy: auth?._id
+    });
 
     let data = {
         status: "success",
