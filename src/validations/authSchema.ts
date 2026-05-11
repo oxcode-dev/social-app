@@ -23,7 +23,7 @@ export const forgotPasswordSchema = z.object({
 })
 
 export const resetPasswordSchema = z.object({
-    otp: z.string()
+    otp: z.number()
         .min(4, { message: "OTP code must be at least 4 characters long" }),
     new_password: z.string().min(6, { message: "Password must be at least 6 characters long" })
         .regex(
