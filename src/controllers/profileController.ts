@@ -3,11 +3,11 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
 import { Post } from '../models/post.ts';
 import { type RequestWithUser } from '../types/index.ts';
-import { fetchUserById } from '../services/userServices.ts';
+import { fetchUserById, updateUserDetails } from '../services/userServices.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
-    // const user = await User.findById(auth?.id).select('-password')
+
     const user = await fetchUserById(auth?.id)
 
     if (!user) {
@@ -32,9 +32,10 @@ export const getUserDetails = async (req: RequestWithUser, res: express.Response
     res.status(200).json(data);
 }
 
-export const updateUserDetails = async (req: RequestWithUser, res: express.Response) => {
+export const updateUserProfile = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
-    const user = await User.findById(auth?.id)
+    
+    const user = await fetchUserById(auth?.id)
 
     if(!user) {
         return res.status(404).json({ message: 'User not found' })
@@ -42,24 +43,25 @@ export const updateUserDetails = async (req: RequestWithUser, res: express.Respo
 
     const { first_name, last_name, email, bio, username } = req.body;
 
-    if(
-        !first_name || !last_name || !email || !username
-    ) {
-        return res.status(400).json({
-            message: "Required fields are missing!",
-        })
-    }
-
-    if(first_name) user.first_name = first_name;
-    if(last_name) user.last_name = last_name;
-    if(email) user.email = email;
-    if(username) user.username = username;
-    if(bio) user.bio = bio;
-
-    await user.save();
+    const updatedUser = await updateUserDetails(user?.id, {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        username: username,
+        bio: bio || user?.bio,
+    })
 
     let data = {
-        user,
+        user: {
+            id: updatedUser?.id,
+            fullName: updatedUser?.first_name + ' ' + updatedUser?.last_name,
+            email: updatedUser?.email,
+            first_name: updatedUser?.first_name,
+            last_name: updatedUser?.last_name,
+            username: updatedUser?.username,
+            avatar: updatedUser?.avatar,
+            bio: updatedUser?.bio,
+        },
         status: "success",
         message: "Profile updated successfully",
     };

@@ -18,6 +18,10 @@ export const updateUserPassword = async (id: string, userData: Pick<IUser, 'pass
     return await User.findByIdAndUpdate(id, userData, {new: true});
 } 
 
+export const updateUserDetails = async (id: string, userData: Partial<IUser>) => {
+    return await User.findByIdAndUpdate(id, userData, {new: true});
+}
+
 export const storeUser = async (user: Omit<IUser, '_id' | 'id' |'posts' | 'saved' | 'followers' | 'followings'>) => {
 
     const newUser = new User(user);

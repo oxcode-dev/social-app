@@ -1,6 +1,6 @@
 import express from 'express';
 import { 
-    getUserDetails, changePassword, updateUserDetails, deleteProfile
+    getUserDetails, changePassword, updateUserProfile, deleteProfile
 } from '../controllers/profileController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 import { validateInputData } from '../middlewares/validate.ts';
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.route('/profile')
     .get(auth, getUserDetails as any)
-    .put(auth, validateInputData(userDetailsSchema), updateUserDetails as any);
+    .put(auth, validateInputData(userDetailsSchema), updateUserProfile as any);
     
 router.post('/change-password', auth, validateInputData(changePasswordSchema), changePassword as any);
 router.delete('/delete-account', auth, deleteProfile as any);
