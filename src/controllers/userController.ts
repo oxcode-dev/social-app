@@ -142,14 +142,11 @@ export const getUserFollowings = async (req: any, res: express.Response) => {
 }
 
 export const getSuggestedUsers = async (req: any, res: express.Response) => {
-    // return console.log(JSON.stringify(req.user))
 
     const newArr = [...req.user.followings, req.user._id];
 
-    const num = req.query.num || 10;
     const users = await User.aggregate([
         { $match: { _id: { $nin: newArr } } },
-        // { $sample: { size: Number(num) } },
         {
             $lookup: {
                 from: "users",
@@ -171,6 +168,7 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
     return res.json({
         users,
         result: users.length,
+        newArr,
     });
     
 }
