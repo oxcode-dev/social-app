@@ -26,7 +26,6 @@ export const getUserDetails = async (req: any, res: express.Response) => {
     let data = {
         status: "success",
         message: "User details retrieved successfully",
-        user_d: user,
         user: {
             id: user?.id,
             fullName: user?.first_name + ' ' + user?.last_name,
@@ -104,7 +103,7 @@ export const getUserFollowers = async (req: any, res: express.Response) => {
     const user = await User.findById(user_id)
         .populate({
             path: "followers",
-            select: "username id first_name last_name",
+            select: "username id first_name last_name email",
         })
 
     if (!user) {
@@ -126,7 +125,7 @@ export const getUserFollowings = async (req: any, res: express.Response) => {
     const user = await User.findById(user_id)
         .populate({
             path: "followings",
-            select: "username id first_name last_name",
+            select: "username id first_name last_name email",
         })
 
     if (!user) {
@@ -140,4 +139,38 @@ export const getUserFollowings = async (req: any, res: express.Response) => {
     }
 
     res.status(200).json(data);
+}
+
+export const getSuggestedUsers = async (req: any, res: express.Response) => {
+    // return console.log(JSON.stringify(req.user))
+
+    const newArr = [...req.user.followings, req.user._id];
+
+    const num = req.query.num || 10;
+    const users = await User.aggregate([
+        { $match: { _id: { $nin: newArr } } },
+        // { $sample: { size: Number(num) } },
+        {
+            $lookup: {
+                from: "users",
+                localField: "followers",
+                foreignField: "_id",
+                as: "followers",
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "followings",
+                foreignField: "_id",
+                as: "followings",
+            },
+        },
+    ]).project("-password");
+
+    return res.json({
+        users,
+        result: users.length,
+    });
+    
 }
