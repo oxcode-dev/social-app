@@ -1,9 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
-import { Post } from '../models/post.ts';
 import { type RequestWithUser } from '../types/index.ts';
-import { fetchUserById, updateUserDetails } from '../services/userServices.ts';
+import { fetchUserById, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
@@ -69,25 +68,19 @@ export const updateUserProfile = async (req: RequestWithUser, res: express.Respo
 }
 
 export const changePassword = async (req: RequestWithUser, res: express.Response) => {
-    const auth = req.user
-    const user = await User.findById(auth?.id)
+    const auth = req.user;
+
+    const user = await fetchUserById(auth?.id)
 
     if(!user) {
         return res.status(404).json({ message: 'User not found' })
     }
     
-    const { password, confirm_password } = req.body;
+    const { password } = req.body;
 
-    if(!password || !confirm_password) {
-        return res.status(400).json({ message: 'Password fields are required' })
-    }
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    if(password !== confirm_password) {
-        return res.status(400).json({ message: 'Passwords do not match' })
-    }
-
-    user.password = await bcrypt.hash(password, 12);
-    await user.save();
+    await updateUserPassword(user._id, { password: hashedPassword })
 
     let data = {
         status: "success",
