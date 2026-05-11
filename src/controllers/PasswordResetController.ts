@@ -5,7 +5,7 @@ import { sendMail } from '../helpers/mailer.ts';
 import bcrypt from 'bcryptjs';
 import { generatePin } from '../helpers/index.ts';
 import { PasswordResetMail } from '../config/mails.ts';
-import { fetchUserByEmail } from '../services/userServices.ts';
+import { fetchUserByEmail, updateUserPassword } from '../services/userServices.ts';
 import { deleteOtpCodeByEmail, fetchOtpCodeByEmailAndOtp, storeOtpCode } from '../services/otpCodeService.ts';
 
 export const forgotPassword = async (req: express.Request, res: express.Response) => {
@@ -56,8 +56,8 @@ export const resetPassword = async (req: express.Request, res: express.Response)
     }
     
     const hashedPassword = await bcrypt.hash(new_password, 12);
-    user.password = hashedPassword;
-    await user.save();
+
+    await updateUserPassword(user._id, { password: hashedPassword })
 
     await deleteOtpCodeByEmail(user.email);
 
@@ -66,5 +66,5 @@ export const resetPassword = async (req: express.Request, res: express.Response)
         message: "Password reset successfully! Please login with your new password.",
     }
 
-    return res.status(201).send(data);
+    return res.status(200).send(data);
 }

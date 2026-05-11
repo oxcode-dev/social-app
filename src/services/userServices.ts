@@ -14,6 +14,10 @@ export const fetchUserById = async (id: string) => {
     return await User.findById(id);
 }
 
+export const updateUserPassword = async (id: string, userData: Pick<IUser, 'password'>) => {
+    return await User.findByIdAndUpdate(id, userData, {new: true});
+} 
+
 export const storeUser = async (user: Omit<IUser, '_id' | 'id' |'posts' | 'saved' | 'followers' | 'followings'>) => {
 
     const newUser = new User(user);
