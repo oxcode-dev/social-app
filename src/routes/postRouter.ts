@@ -11,7 +11,7 @@ import { postCommentSchema, postDetailsSchema } from '../validations/postSchema.
 const router = express.Router();
 
 router.route('/')
-    .get(auth, getPosts)
+    .get(auth, getPosts as any)
     .post(auth, validateInputData(postDetailsSchema), createPost);
 
 router.route('/:id')
