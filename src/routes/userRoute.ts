@@ -9,9 +9,9 @@ router.route('/')
 
 router.get('/:id', getUserDetails)
 
-router.put('/:id/followers', auth, followUser)
+router.put('/:id/follow', auth, followUser)
 
-router.put('/:id/unfollow-user', auth, unfollowUser)
+router.put('/:id/unfollow', auth, unfollowUser)
 
 router.get('/:id/followers', auth, getUserFollowers)
 
