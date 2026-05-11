@@ -1,20 +1,10 @@
 import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
+import { type RequestWithUser } from '../types/index.ts';
 
-interface RequestWithUser extends express.Request {
-    user: {
-        id: string;
-    } | null
-}
-
-// export const createPost = async (req: RequestWithUser, res: express.Response) => {
 export const createPost = async (req: any, res: express.Response) => {
     const auth = req?.user;
-
-    if (!auth?.id) {
-        return res.status(401).json({ message: "User not authenticated" });
-    }
 
     const requestData = {
         caption: req.body.caption as string,
@@ -29,12 +19,11 @@ export const createPost = async (req: any, res: express.Response) => {
         message: "Post Created successfully",
         post: newPost,
     }
-    // Access the logged-in user's data via req.user
-    res.status(200).json(data);
+
+    res.status(201).json(data);
 }
 
-// export const getPosts = async (req: RequestWithUser, res: express.Response) => {
-export const getPosts = async (req: any, res: express.Response) => {
+export const getPosts = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
 
     const posts = await Post.find()
@@ -81,10 +70,6 @@ export const getPost = async (req: express.Request | any, res: express.Response)
 
 export const updatePost = async (req: express.Request | any, res: express.Response) => {
     const auth = req?.user;
-
-    if (!auth?.id) {
-        return res.status(401).json({ message: "User not authenticated" });
-    }
 
     const updatedPost = {
         caption: req.body.caption as string,
