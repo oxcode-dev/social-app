@@ -1,7 +1,7 @@
 import express from 'express';
 import { User } from '../models/user.ts';
 import { type RequestWithUser, type PaginationType } from '../types/index.ts';
-import { fetchUserById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from '../services/userServices.ts';
+import { fetchUserAndFollowingsById, fetchUserById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from '../services/userServices.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
     const users = await User.find()//.select('-password');
@@ -74,11 +74,8 @@ export const unfollowUser = async (req: RequestWithUser, res: express.Response) 
 export const getUserFollowers = async (req: any, res: express.Response) => {
     const user_id = req.params.id
 
-    const user = await User.findById(user_id)
-        .populate({
-            path: "followers",
-            select: "username id first_name last_name email",
-        })
+
+    const user = await fetchUserAndFollowingsById(user_id)
 
     if (!user) {
         res.status(400).json({ msg: "User does not exist." });
@@ -96,11 +93,7 @@ export const getUserFollowers = async (req: any, res: express.Response) => {
 export const getUserFollowings = async (req: any, res: express.Response) => {
     const user_id = req.params.id
 
-    const user = await User.findById(user_id)
-        .populate({
-            path: "followings",
-            select: "username id first_name last_name email",
-        })
+    const user = await fetchUserAndFollowingsById(user_id);
 
     if (!user) {
         res.status(400).json({ msg: "User does not exist." });

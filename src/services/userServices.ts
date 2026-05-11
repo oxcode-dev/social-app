@@ -73,3 +73,15 @@ export const unfollowUserSystem = async (userIdToUnfollow: string, followerId: s
     );
 }
 
+export const fetchUserAndFollowingsById = async (userId: string) => {
+    return await User.findById(userId)
+        .populate({
+            path: "followings",
+            select: "username id first_name last_name email",
+        })
+        .populate({
+            path: "followers",
+            select: "username id first_name last_name email",
+        })
+}
+
