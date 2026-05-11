@@ -28,3 +28,29 @@ export const storeUser = async (user: Omit<IUser, '_id' | 'id' |'posts' | 'saved
 
     return await newUser.save();
 }
+
+export const fetchUserByIdAndFollowerId = async (userId: string, followerId: string) => {
+    return await User.find({
+        _id: userId,
+        followers: followerId,
+    });
+}
+
+
+export const followUserSystem = async (userIdToFollow: string, followerId: string) => {
+    await User.findOneAndUpdate(
+        { _id: userIdToFollow},
+        {
+            $push: {
+                followers: followerId
+            },
+        },
+        { new: true }
+    )
+
+    await User.findOneAndUpdate(
+        { _id: followerId },
+        { $push: { followings: userIdToFollow } },
+        { new: true }
+    );
+}

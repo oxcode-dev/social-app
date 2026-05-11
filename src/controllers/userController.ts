@@ -1,9 +1,9 @@
 import express from 'express';
 import { User } from '../models/user.ts';
-import { type PaginationType } from '../types/index.ts';
+import { type RequestWithUser, type PaginationType } from '../types/index.ts';
+import { fetchUserById, fetchUserByIdAndFollowerId, followUserSystem } from '../services/userServices.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
-    // const auth = req?.user;
     const users = await User.find()//.select('-password');
 
     let data = {
@@ -11,14 +11,13 @@ export const getAllUsers = async (req: any, res: express.Response) => {
         message: 'Users fetched succesfully!'
     }
 
-    // return res.status(200).json(data)
     res.status(200).json(data);
 }
 
-export const getUserDetails = async (req: any, res: express.Response) => {
-    const user_id = req.params.id
+export const getUserDetails = async (req: express.Request, res: express.Response) => {
+    const user_id = String(req.params?.id || '');
 
-    const user = await User.findById(user_id).select('-password')
+    const user = await fetchUserById(user_id);
 
     if (!user) {
         res.status(400).json({ msg: "User does not exist." });
@@ -42,32 +41,17 @@ export const getUserDetails = async (req: any, res: express.Response) => {
     res.status(200).json(data);
 }
 
-export const followUser = async (req: any, res: express.Response) => {
+export const followUser = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
-    const user = await User.find({
-        _id: req.params.id,
-        followers: auth?.id,
-    });
+    const userIdToFollow = String(req?.params?.id || '');
+
+    const user = await fetchUserByIdAndFollowerId(userIdToFollow, auth?.id)
 
     if (user.length > 0) {
         return res.status(400).json({ msg: "You are already following this user." });
     }
 
-    await User.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-            $push: {
-                followers: auth?.id
-            },
-        },
-        { new: true }
-    )
-
-    await User.findOneAndUpdate(
-        { _id: auth?.id },
-        { $push: { followings: req.params.id } },
-        { new: true }
-    );
+    await followUserSystem(userIdToFollow, auth?.id);
 
     res.json({ 
         status: 'success',
@@ -75,11 +59,13 @@ export const followUser = async (req: any, res: express.Response) => {
     });
 }
 
-export const unfollowUser = async (req: any, res: express.Response) => {
+export const unfollowUser = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
+    const userIdToUnfollow = String(req?.params?.id || '');
+
 
     await User.findOneAndUpdate(
-        { _id: req.params.id },
+        { _id: userIdToUnfollow },
         {
             $pull: { followers: auth?.id }
         },
@@ -88,7 +74,7 @@ export const unfollowUser = async (req: any, res: express.Response) => {
 
     await User.findOneAndUpdate(
         { _id: auth?.id },
-        { $pull: { followings: req.params.id } },
+        { $pull: { followings: userIdToUnfollow } },
         { new: true }
     );
 
