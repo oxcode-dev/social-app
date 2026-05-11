@@ -148,6 +148,10 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
 
     const excludedUsers = [...req.user.followings, req.user._id];
 
+    const totalCount = await User.countDocuments({
+        _id: { $nin: excludedUsers },
+    })
+
     const users = await User.find({
             _id: { $nin: excludedUsers },
         })
@@ -157,10 +161,15 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
         .limit(limit);
 
     return res.json({
-        // users,
-        // result: users.length,
-        // excludedUsers,
+        status: "success",
         users,
+        message: "Products retrieved successfully!!!",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
     });
     
 }
