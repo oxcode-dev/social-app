@@ -7,8 +7,6 @@ const router = express.Router();
 router.route('/')
     .get(getAllUsers)
 
-router.get('/:id', getUserDetails)
-
 router.put('/:id/follow', auth, followUser)
 
 router.put('/:id/unfollow', auth, unfollowUser)
@@ -16,6 +14,8 @@ router.put('/:id/unfollow', auth, unfollowUser)
 router.get('/:id/followers', auth, getUserFollowers)
 
 router.get('/:id/followings', auth, getUserFollowings)
+
+router.get('/:id', getUserDetails)
 
 
 
