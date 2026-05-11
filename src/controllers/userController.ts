@@ -1,7 +1,7 @@
 import express from 'express';
 import { User } from '../models/user.ts';
 import { type RequestWithUser, type PaginationType } from '../types/index.ts';
-import { fetchUserById, fetchUserByIdAndFollowerId, followUserSystem } from '../services/userServices.ts';
+import { fetchUserById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from '../services/userServices.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
     const users = await User.find()//.select('-password');
@@ -63,20 +63,7 @@ export const unfollowUser = async (req: RequestWithUser, res: express.Response) 
     const auth = req?.user;
     const userIdToUnfollow = String(req?.params?.id || '');
 
-
-    await User.findOneAndUpdate(
-        { _id: userIdToUnfollow },
-        {
-            $pull: { followers: auth?.id }
-        },
-        { new: true }
-    )
-
-    await User.findOneAndUpdate(
-        { _id: auth?.id },
-        { $pull: { followings: userIdToUnfollow } },
-        { new: true }
-    );
+    await unfollowUserSystem(userIdToUnfollow, auth?.id);
 
     res.json({
         status: 'success',

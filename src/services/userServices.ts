@@ -54,3 +54,22 @@ export const followUserSystem = async (userIdToFollow: string, followerId: strin
         { new: true }
     );
 }
+
+export const unfollowUserSystem = async (userIdToUnfollow: string, followerId: string) => {
+    await User.findOneAndUpdate(
+        { _id: userIdToUnfollow},
+        {
+            $pull: {
+                followers: followerId
+            },
+        },
+        { new: true }
+    )
+
+    await User.findOneAndUpdate(
+        { _id: followerId },
+        { $pull: { followings: userIdToUnfollow } },
+        { new: true }
+    );
+}
+
