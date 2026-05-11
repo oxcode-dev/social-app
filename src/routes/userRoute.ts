@@ -10,18 +10,14 @@ router.route('/')
 
 router.get("/suggestions", auth, handlePagination as any, getSuggestedUsers);
 
-router.put('/:id/follow', auth, followUser)
+router.put('/:id/follow', auth, followUser as any)
 
-router.put('/:id/unfollow', auth, unfollowUser)
+router.put('/:id/unfollow', auth, unfollowUser as any)
 
 router.get('/:id/followers', auth, getUserFollowers)
 
 router.get('/:id/followings', auth, getUserFollowings)
 
-
-
 router.get('/:id', getUserDetails)
-
-
 
 export { router as userRouter };
