@@ -1,3 +1,5 @@
+import express from 'express';
+
 export interface IUser {
     _id: string;
     first_name: string;
@@ -32,4 +34,8 @@ export interface AuthUserType {
 export interface DataStoredInToken {
   id: string;
   email: string;
+}
+
+export interface RequestWithUser extends express.Request {
+    user: Pick<AuthUserType, 'id' | 'email'>
 }

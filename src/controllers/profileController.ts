@@ -2,18 +2,15 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
 import { Post } from '../models/post.ts';
-
-interface RequestWithUser extends express.Request {
-    user: {
-        id: string;
-    } | null
-}
+import { type RequestWithUser } from '../types/index.ts';
+import { fetchUserById } from '../services/userServices.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
-    const auth = req.user
-    const user = await User.findById(auth?.id).select('-password')
+    const auth = req?.user
+    // const user = await User.findById(auth?.id).select('-password')
+    const user = await fetchUserById(auth?.id)
 
-        if (!user) {
+    if (!user) {
         res.status(400).json({ msg: "User does not exist." });
     }
 
@@ -29,10 +26,6 @@ export const getUserDetails = async (req: RequestWithUser, res: express.Response
             username: user?.username,
             avatar: user?.avatar,
             bio: user?.bio,
-            // posts: user?.posts || [],
-            // saved: user?.saved || [],
-            // followers: user?.followers || [],
-            // followings: user?.followings || [],
         },
     }
 
@@ -40,7 +33,7 @@ export const getUserDetails = async (req: RequestWithUser, res: express.Response
 }
 
 export const updateUserDetails = async (req: RequestWithUser, res: express.Response) => {
-    const auth = req.user
+    const auth = req?.user
     const user = await User.findById(auth?.id)
 
     if(!user) {
