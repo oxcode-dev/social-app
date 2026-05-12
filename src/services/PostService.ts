@@ -15,3 +15,17 @@ export const fetchAllPostsWithPagination = async (skip: number, limit: number) =
         .skip(skip)
         .limit(limit)
 }
+
+export const fetchPost = async (id: string) => {
+    return await Post.findById(id)
+        .populate("postedBy", "username id first_name last_name")
+        .populate("likes", "username id first_name last_name")
+        .populate("savedBy", "username id first_name last_name")
+        .populate({
+            path: "comments",
+            populate: {
+                path: "user",
+                select: "username id first_name last_name",
+            }
+        });
+}

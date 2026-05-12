@@ -2,7 +2,7 @@ import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
-import { countAllPosts, fetchAllPostsWithPagination, storePost } from '../services/PostService.ts';
+import { countAllPosts, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -52,17 +52,7 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
 export const getPost = async (req: express.Request | any, res: express.Response) => {
     const auth = req?.user;
 
-    const post = await Post.findById(req.params.id)
-        .populate("postedBy", "username id first_name last_name")
-        .populate("likes", "username id first_name last_name")
-        .populate("savedBy", "username id first_name last_name")
-        .populate({
-            path: "comments",
-            populate: {
-                path: "user",
-                select: "username id first_name last_name",
-            }
-        })
+    const post = await fetchPost(req.params.id);
 
     if (!post) {
         return res.status(404).send({
