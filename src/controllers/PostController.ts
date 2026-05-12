@@ -1,7 +1,7 @@
 import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
-import { type RequestWithUser } from '../types/index.ts';
+import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -23,20 +23,25 @@ export const createPost = async (req: RequestWithUser, res: express.Response) =>
     res.status(201).json(data);
 }
 
-export const getPosts = async (req: RequestWithUser, res: express.Response) => {
+export const getPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
     const auth = req?.user;
+
+    const { page, limit, skip } = req as PaginationType;
 
     const posts = await Post.find()
         .populate("postedBy", "username id first_name last_name")
+        .skip(skip)
+        .limit(limit)
+
+    console.log(posts.length)
 
     let data = {
         posts: posts,   
         status: "success",
         message: "Posts retrieved successfully",
     }
+
     res.status(200).json(data);
-
-
 }
 
 export const getPost = async (req: express.Request | any, res: express.Response) => {

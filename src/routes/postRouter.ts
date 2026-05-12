@@ -7,11 +7,12 @@ import {
 } from '../controllers/PostController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 import { postCommentSchema, postDetailsSchema } from '../validations/postSchema.ts';
+import { handlePagination } from '../middlewares/handlePagination.ts';
 
 const router = express.Router();
 
 router.route('/')
-    .get(auth, getPosts as any)
+    .get(auth, handlePagination as any, getPosts as any)
     .post(auth, validateInputData(postDetailsSchema), createPost as any);
 
 router.route('/:id')
