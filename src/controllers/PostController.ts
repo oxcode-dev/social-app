@@ -50,7 +50,6 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
 }
 
 export const getPost = async (req: express.Request | any, res: express.Response) => {
-    const auth = req?.user;
 
     const post = await fetchPost(req.params.id);
 
@@ -190,7 +189,7 @@ export const saveUnsavePost = async (req: express.Request | any, res: express.Re
 }
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
-    const post = await Post.findById(req.params.id);
+    const post = await fetchPost(req.params.id);
 
     if (!post) {
         return res.status(404).send({
