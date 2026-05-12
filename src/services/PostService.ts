@@ -29,3 +29,8 @@ export const fetchPost = async (id: string) => {
             }
         });
 }
+
+export const editPost = async (id: string, data: Pick<IPost, 'caption' | 'image' | 'postedBy'>) => {
+    return await Post.findByIdAndUpdate(id, data, { new: true})
+        .populate("postedBy", "username id first_name last_name")
+}

@@ -2,7 +2,7 @@ import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
-import { countAllPosts, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
+import { countAllPosts, editPost, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -71,14 +71,13 @@ export const getPost = async (req: express.Request | any, res: express.Response)
 export const updatePost = async (req: express.Request | any, res: express.Response) => {
     const auth = req?.user;
 
-    const updatedPost = {
-        caption: req.body.caption as string,
-        image: req.body.image as string,
+    const { caption, image } = req.body as { caption: string, image: string | null}
+    
+    const post = await editPost(req.params.id, {
+        caption,
+        image,
         postedBy: auth.id
-    }
-
-    const post = await Post.findByIdAndUpdate(req.params.id, updatedPost, { new: true})
-        .populate("postedBy", "username id first_name last_name")
+    })
 
     if (!post) {
         return res.status(404).send({
