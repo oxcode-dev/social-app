@@ -50,7 +50,7 @@ export type PaginationType = {
 
 export interface IPost {
     caption: string;
-    image: string;
+    image?: string | null;
     postedBy: string | mongoose.Schema.Types.ObjectId;
     likes: mongoose.Schema.Types.ObjectId[];
     comments: {

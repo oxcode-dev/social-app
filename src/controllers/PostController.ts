@@ -2,13 +2,14 @@ import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
+import { countAllPosts, fetchAllPostsWithPagination, storePost } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
 
-    const { caption, image } = req.body as { caption: string, image: string}
+    const { caption, image } = req.body as { caption: string, image: string | null}
 
-    const newPost = await Post.create({
+    const newPost = await storePost({
         caption,
         image,
         postedBy: auth?._id
@@ -28,10 +29,8 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
 
     const { page, limit, skip } = req as PaginationType;
 
-    const posts = await Post.find()
-        .populate("postedBy", "username id first_name last_name")
-        .skip(skip)
-        .limit(limit)
+    const totalCount = await countAllPosts();
+    const posts = await fetchAllPostsWithPagination(skip, limit);
 
     console.log(posts.length)
 
@@ -39,6 +38,12 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
         posts: posts,   
         status: "success",
         message: "Posts retrieved successfully",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
     }
 
     res.status(200).json(data);
