@@ -1,17 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
-interface IPost {
-    caption: string;
-    image: string;
-    postedBy: string | mongoose.Schema.Types.ObjectId;
-    likes: mongoose.Schema.Types.ObjectId[];
-    comments: {
-        user: mongoose.Schema.Types.ObjectId;
-        comment: string;
-    }[];
-    savedBy: mongoose.Schema.Types.ObjectId[];
-    createdAt: Date;
-}
+import { type IPost } from "../types/index.ts";
 
 const postSchema = new Schema<IPost>({
     caption: {

@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
 export interface IUser {
     _id: string;
@@ -45,4 +46,17 @@ export type PaginationType = {
     page: number;
     limit: number;
     skip: number;
+}
+
+export interface IPost {
+    caption: string;
+    image: string;
+    postedBy: string | mongoose.Schema.Types.ObjectId;
+    likes: mongoose.Schema.Types.ObjectId[];
+    comments: {
+        user: mongoose.Schema.Types.ObjectId;
+        comment: string;
+    }[];
+    savedBy: mongoose.Schema.Types.ObjectId[];
+    createdAt: Date;
 }
