@@ -2,7 +2,7 @@ import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
-import { countAllPosts, editPost, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
+import { countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -97,11 +97,7 @@ export const updatePost = async (req: express.Request | any, res: express.Respon
 export const deletePost = async (req: any, res: express.Response) => {
     const auth = req?.user;
 
-    // const result = await Post.findById(req.params.id)
-    const result = await Post.findOneAndDelete({
-        _id: req.params.id,
-        postedBy: auth.id
-    })
+    const result = await deletePostByIdAndAuthor(req.params.id, auth.id)
 
     if (!result) {
         return res.status(404).send({
@@ -120,7 +116,7 @@ export const deletePost = async (req: any, res: express.Response) => {
 export const likeUnlikePost = async (req: any, res: express.Response) => {
     const auth = req?.user;
 
-    const post = await Post.findById(req.params.id);
+    const post = await fetchPost(req.params.id)
 
     if (!post) {
         return res.status(404).send({

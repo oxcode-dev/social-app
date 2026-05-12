@@ -34,3 +34,10 @@ export const editPost = async (id: string, data: Pick<IPost, 'caption' | 'image'
     return await Post.findByIdAndUpdate(id, data, { new: true})
         .populate("postedBy", "username id first_name last_name")
 }
+
+export const deletePostByIdAndAuthor = async (id: string, author_id: string) => {
+    return await Post.findOneAndDelete({
+        _id: id,
+        postedBy: author_id
+    })
+}
