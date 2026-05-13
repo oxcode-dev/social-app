@@ -2,7 +2,10 @@ import express from 'express';
 import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
-import { countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, storePost } from '../services/PostService.ts';
+import { 
+    countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, storePost, 
+    storePostComment
+} from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -189,20 +192,19 @@ export const saveUnsavePost = async (req: express.Request | any, res: express.Re
 }
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
-    const post = await fetchPost(req.params.id);
+    const postId = req.params.id as string;
+    const auth = req.user;
 
-    if (!post) {
-        return res.status(404).send({
-            message: "Post not found!",
+    const comment = req.body.comment as string;
+    
+    let response: boolean = await storePostComment(postId, auth.id, comment);
+
+    if(!response) {
+        return res.status(404).json({
+            status: "error",
+            message: "Post not found!"
         })
     }
-
-    post.comments.push({
-        user: req.user._id,
-        comment: req.body.comment
-    });
-
-    await post.save();
 
     return res.status(200).json({
         success: true,

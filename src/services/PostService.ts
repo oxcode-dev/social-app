@@ -52,6 +52,9 @@ export const storePostComment = async (postId: string, userId: string, comment: 
         });
 
         await post.save();
-        return post;
+
+        return true
     }
+
+    return false;
 }
