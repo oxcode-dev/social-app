@@ -54,7 +54,7 @@ export interface IPost {
     postedBy: string | mongoose.Schema.Types.ObjectId;
     likes: mongoose.Schema.Types.ObjectId[];
     comments: {
-        user: mongoose.Schema.Types.ObjectId;
+        user: string | mongoose.Schema.Types.ObjectId;
         comment: string;
     }[];
     savedBy: mongoose.Schema.Types.ObjectId[];

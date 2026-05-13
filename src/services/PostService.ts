@@ -41,3 +41,17 @@ export const deletePostByIdAndAuthor = async (id: string, author_id: string) => 
         postedBy: author_id
     })
 }
+
+export const storePostComment = async (postId: string, userId: string, comment: string) => {
+    const post = await fetchPost(postId);
+    
+    if(post) {
+        post.comments.push({
+            user: userId,
+            comment:comment
+        });
+
+        await post.save();
+        return post;
+    }
+}
