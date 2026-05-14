@@ -58,3 +58,30 @@ export const storePostComment = async (postId: string, userId: string, comment: 
 
     return false;
 }
+
+
+export const likeUnlikePostSystem = async (postId: string, userId: string) => {
+    const post = await fetchPost(postId)
+
+    if (!post) {
+        return false;
+        // return res.status(404).send({
+        //     message: "Post not found!",
+        // })
+    }
+
+    let responseMessage;
+
+    if (post.likes.includes(userId)) {
+        const index = post.likes.indexOf(userId);
+        post.likes.splice(index, 1);
+        await post.save();
+        responseMessage = "Post Unliked successfully"
+    } else {
+        post.likes.push(userId)
+        await post.save();
+        responseMessage = "Post Liked successfully"
+    }
+
+    return responseMessage;
+}
