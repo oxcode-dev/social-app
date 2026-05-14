@@ -4,7 +4,7 @@ import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
     countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, likeUnlikePostSystem, storePost, 
-    storePostComment
+    storePostComment, saveUnsavePostSystem,
 } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
@@ -134,46 +134,18 @@ export const likeUnlikePost = async (req: any, res: express.Response) => {
 
 export const saveUnsavePost = async (req: express.Request | any, res: express.Response) => {
     const auth = req.user;
-    const user = await User.findById(auth.id)
+    
+    let response = await saveUnsavePostSystem(req.params.id, auth.id);
 
-    if (!user) {
-        return res.status(404).send({
-            message: "User not found!",
+    if (response.error) {
+        return res.status(404).json({
+            message: response.message
         })
     }
 
-    const post = await Post.findById(req.params.id);
-
-    if (!post) {
-        return res.status(404).send({
-            message: "Post not found!",
-        })
-    }
-    let responseMessage;
-
-    // @ts-ignore
-    if (user.saved.includes(post.id.toString())) {
-        user.saved = user.saved.filter((p) => p.toString() !== post.id.toString())
-        post.savedBy = post.savedBy.filter((p) => p.toString() !== auth.id.toString())
-        await user.save();
-        await post.save();
-
-        responseMessage = "Post Unsaved"
-    } 
-    else {
-        // @ts-ignore
-        user.saved.push(post.id)
-        post.savedBy.push(auth.id)
-
-        await user.save();
-        await post.save();
-
-        responseMessage = "Post Saved"
-    }
-
-    return res.status(200).json({
+    res.status(200).json({
         status: "success",
-        message: responseMessage
+        message: response.message,
     });
 }
 

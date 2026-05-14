@@ -1,4 +1,5 @@
 import { Post } from "../models/post.ts"
+import { User } from "../models/user.ts"
 import { type IPost } from "../types/index.ts"
 
 export const storePost = async (data: Pick<IPost, 'caption' | 'image' | 'postedBy'>) => {
@@ -71,7 +72,7 @@ export const likeUnlikePostSystem = async (postId: string, userId: string) => {
     if (!post) {
         response.error = true;
         response.message = "Post not found!";
-        return response;;
+        return response;
     }
 
 
@@ -86,5 +87,46 @@ export const likeUnlikePostSystem = async (postId: string, userId: string) => {
         response.message = "Post Liked successfully"
     }
 
+    return response;
+}
+
+export const saveUnsavePostSystem = async (postId: string, userId: string) => {
+    let response = {
+        error: false,
+        message: "",
+    };
+    const user = await User.findById(userId)
+
+    if (!user) {
+        response.error = true;
+        response.message = "User not found!";
+        return response;
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+        response.error = true;
+        response.message = "Post not found!";
+        return response;
+    }
+
+    if (user.saved.includes(post.id.toString())) {
+        user.saved = user.saved.filter((p) => p.toString() !== post.id.toString())
+        post.savedBy = post.savedBy.filter((p) => p.toString() !== userId.toString())
+        await user.save();
+        await post.save();
+
+        response.message = "Post Unsaved"
+    } 
+    else {
+        user.saved.push(post.id)
+        post.savedBy.push(userId)
+
+        await user.save();
+        await post.save();
+
+        response.message = "Post Saved"
+    }
     return response;
 }
