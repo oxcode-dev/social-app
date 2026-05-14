@@ -1,6 +1,4 @@
 import express from 'express';
-import { Post } from '../models/post.ts';
-import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
     countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, likeUnlikePostSystem, storePost, 
