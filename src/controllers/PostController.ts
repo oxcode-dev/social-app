@@ -3,7 +3,7 @@ import { Post } from '../models/post.ts';
 import { User } from '../models/user.ts';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
-    countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, storePost, 
+    countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, likeUnlikePostSystem, storePost, 
     storePostComment
 } from '../services/PostService.ts';
 
@@ -118,30 +118,17 @@ export const deletePost = async (req: any, res: express.Response) => {
 export const likeUnlikePost = async (req: any, res: express.Response) => {
     const auth = req?.user;
 
-    const post = await fetchPost(req.params.id)
+    let response = await likeUnlikePostSystem(req.params.id, auth.id);
 
-    if (!post) {
-        return res.status(404).send({
-            message: "Post not found!",
+    if (response.error) {
+        return res.status(404).json({
+            message: response.message
         })
-    }
-
-    let responseMessage;
-
-    if (post.likes.includes(auth.id)) {
-        const index = post.likes.indexOf(auth.id);
-        post.likes.splice(index, 1);
-        await post.save();
-        responseMessage = "Post Unliked successfully"
-    } else {
-        post.likes.push(auth.id)
-        await post.save();
-        responseMessage = "Post Liked successfully"
     }
 
     let data = {
         status: "success",
-        message: responseMessage,
+        message: response.message,
     }
     res.status(200).json(data);
 }
