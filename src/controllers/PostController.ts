@@ -126,11 +126,10 @@ export const likeUnlikePost = async (req: any, res: express.Response) => {
         })
     }
 
-    let data = {
+    res.status(200).json({
         status: "success",
         message: response.message,
-    }
-    res.status(200).json(data);
+    });
 }
 
 export const saveUnsavePost = async (req: express.Request | any, res: express.Response) => {
