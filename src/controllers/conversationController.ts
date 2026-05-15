@@ -1,6 +1,7 @@
 import express from "express"
 import { Conversation } from "../models/conversation.ts";
 import { Chat } from "../models/chat.ts";
+import { storeMessage } from "../services/conversationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
     const auth = req?.user;
@@ -8,28 +9,7 @@ export const sendMessage = async (req: any, res: express.Response) => {
 
     if (!recipient || (!text.trim())) return;
 
-    const newChat = await Chat.findOneAndUpdate(
-        {
-            $or: [
-                { recipients: [auth?.id, recipient] },
-                { recipients: [recipient, auth.id] },
-            ],
-        },
-        {
-            recipients: [auth?.id, recipient],
-            latestMessage: text,
-        },
-        { new: true, upsert: true }
-    );
-
-    const conversation = new Conversation({
-        chatId: newChat._id,
-        sender: auth?.id,
-        receiver: recipient,
-        content: text,
-    });
-
-    await conversation.save();
+    await storeMessage(auth.id, recipient, text);
 
     res.json({ msg: "Created." });
 }
