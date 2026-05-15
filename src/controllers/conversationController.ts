@@ -11,7 +11,7 @@ export const sendMessage = async (req: any, res: express.Response) => {
 
     await storeMessage(auth.id, recipient, text);
 
-    res.json({ msg: "Created." });
+    res.status(201).json({ msg: "Created." });
 }
 
 export const getChats = async (req: any, res: express.Response) => {
