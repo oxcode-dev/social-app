@@ -6,11 +6,11 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
         {
             $or: [
                 { recipients: [userId, recipientId] },
-                { recipients: [recipientId, auth.id] },
+                { recipients: [recipientId, userId] },
             ],
         },
         {
-            recipients: [userId, recipient],
+            recipients: [userId, recipientId],
             latestMessage: text,
         },
         { new: true, upsert: true }
@@ -19,7 +19,7 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
     const conversation = new Conversation({
         chatId: newChat._id,
         sender: userId,
-        receiver: recipient,
+        receiver: recipientId,
         content: text,
     });
 
