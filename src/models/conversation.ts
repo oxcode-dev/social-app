@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 export interface IConversation {
   _id: string;
-  sender: mongoose.Schema.Types.ObjectId;
-  receiver: mongoose.Schema.Types.ObjectId;
+  sender: string | mongoose.Schema.Types.ObjectId;
+  receiver: string | mongoose.Schema.Types.ObjectId;
   chatId: string | mongoose.Schema.Types.ObjectId;
   content: string;
 }
