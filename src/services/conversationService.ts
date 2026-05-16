@@ -25,3 +25,9 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
 
     await conversation.save();
 }
+
+export const fetchChatConversations = async (chatId: string) => {
+    return await Conversation.find({
+        chatId: chatId
+    }).populate("receiver sender");
+}

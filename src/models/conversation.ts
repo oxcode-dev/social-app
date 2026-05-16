@@ -4,7 +4,7 @@ export interface IConversation {
   _id: string;
   sender: mongoose.Schema.Types.ObjectId;
   receiver: mongoose.Schema.Types.ObjectId;
-  chatId: mongoose.Schema.Types.ObjectId;
+  chatId: string | mongoose.Schema.Types.ObjectId;
   content: string;
 }
 
