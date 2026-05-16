@@ -1,7 +1,7 @@
 import express from "express"
 import { Conversation } from "../models/conversation.ts";
 import { Chat } from "../models/chat.ts";
-import { fetchChatConversations, storeMessage } from "../services/conversationService.ts";
+import { fetchAllChats, fetchChatConversations, storeMessage } from "../services/conversationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
     const auth = req?.user;
@@ -15,11 +15,9 @@ export const sendMessage = async (req: any, res: express.Response) => {
 }
 
 export const getChats = async (req: any, res: express.Response) => {
-    const chats = await Chat.find({
-        recipients: {
-            $in: [req.user._id]
-        }
-    }).sort({ updatedAt: -1 }).populate("recipients latestMessage");
+    const auth = req?.user;
+
+    const chats = await fetchAllChats(auth?._id);
 
     res.status(200).json({
         success: true,
