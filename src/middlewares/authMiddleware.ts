@@ -29,7 +29,8 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
             JWT_SECRET
         ) as DataStoredInToken;
 
-        req.user = await User.findById(decoded.id).select('-password');
+        // req.user = await User.findById(decoded.id).select('-password');
+        req.user = decoded;
 
         next();
     } catch (error) {
