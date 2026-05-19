@@ -42,4 +42,3 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
 export { auth };
 
 
-
