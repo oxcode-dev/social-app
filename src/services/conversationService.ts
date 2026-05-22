@@ -40,4 +40,3 @@ export const fetchChatConversations = async (chatId: string) => {
     }).populate("receiver sender");
 }
 
-
