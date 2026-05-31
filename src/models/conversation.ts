@@ -33,4 +33,3 @@ conversationSchema.set('toJSON', { virtuals: true });
 
 export const Conversation = mongoose.model('social_conversations', conversationSchema);
 
-
