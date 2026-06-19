@@ -14,6 +14,10 @@ const routes = (app: express.Application) => {
     app.use('/api/posts', postsRouter)
     app.use('/api/chats', chatsRouter)
     app.use('/api/users', userRouter)
+
+    app.get('/api/test', (req, res) => {
+        res.status(200).json({ message: 'Testing API routes' })
+    })
 }
 
 export default routes
