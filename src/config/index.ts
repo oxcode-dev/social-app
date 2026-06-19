@@ -9,3 +9,5 @@ export const isProduction = NODE_ENV === "production";
 
 export const EMAIL_SMTP_USERNAME = process.env.EMAIL_SMTP_USERNAME as string;
 export const CLIENT_URL = process.env.CLIENT_URL as string;
+
+export const MONGO_URI = process.env.MONGO_URI as string;
