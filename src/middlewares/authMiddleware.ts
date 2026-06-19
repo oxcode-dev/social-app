@@ -1,12 +1,8 @@
-import { config } from "dotenv";
 import express from "express";
 import jwt from 'jsonwebtoken'
 // import { AuthUserType, DataStoredInToken } from "../types/index.ts";
-import { User } from "../models/user.ts";
-
-config();
-
-const JWT_SECRET = process.env.JWT_SECRET as string;
+// import { User } from "../models/user.ts";
+import { JWT_SECRET } from "../config/index.ts";
 
 export interface DataStoredInToken {
   id: string;
