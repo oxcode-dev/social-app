@@ -8,6 +8,8 @@ export const isDevelopment = NODE_ENV === "development";
 export const isProduction = NODE_ENV === "production";
 
 export const EMAIL_SMTP_USERNAME = process.env.EMAIL_SMTP_USERNAME as string;
+export const EMAIL_SMTP_PASSWORD = process.env.EMAIL_SMTP_PASSWORD as string;
+
 export const CLIENT_URL = process.env.CLIENT_URL as string;
 
 export const MONGO_URI = process.env.MONGO_URI as string;

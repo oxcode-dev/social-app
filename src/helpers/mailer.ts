@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { EMAIL_SMTP_PASSWORD, EMAIL_SMTP_USERNAME } from '../config/index.ts';
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -7,8 +8,8 @@ let transporter = nodemailer.createTransport({
 	// port: process.env.EMAIL_SMTP_PORT,
 	//secure: process.env.EMAIL_SMTP_SECURE, // lack of ssl commented this. You can uncomment it.
 	auth: {
-		user: process.env.EMAIL_SMTP_USERNAME,
-		pass: process.env.EMAIL_SMTP_PASSWORD
+		user: EMAIL_SMTP_USERNAME,
+		pass: EMAIL_SMTP_PASSWORD
 	}
 });
 
