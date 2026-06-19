@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { authRouter } from './authRoute.ts';
 import { passwordResetRouter } from './passwordResetRouter.ts';
 import { profileRouter } from './profileRouter.ts';
