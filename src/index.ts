@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 app.use(rateLimiter({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 1 * 60 * 1000, // 1 minutes
   max: 5, // Reduce to 50 requests
   standardHeaders: true,
   legacyHeaders: false,
