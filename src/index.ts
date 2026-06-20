@@ -4,11 +4,21 @@ import connectDB from "./config/DB.ts";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import routes from "./routes/index.ts";
+import rateLimiter from 'express-rate-limit';
 
 
 const app: Application = express();
 
 app.use(express.json());
+
+
+app.use(rateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Reduce to 50 requests
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.path === '/health' // Skip health checks
+}));
 
 // Middleware to parse JSON data
 app.use(bodyParser.json());
