@@ -22,10 +22,10 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
 
     try {
         
-        const decoded = jwt.verify(
-            token,
-            JWT_SECRET
-        ) as DataStoredInToken;
+        // const decoded = jwt.verify(
+        //     token,
+        //     JWT_SECRET
+        // ) as DataStoredInToken;
 
         req.user = await User.findById('699f80cf00d4b770db122aa5').select('-password');
         // req.user = await User.findById(decoded.id).select('-password');
