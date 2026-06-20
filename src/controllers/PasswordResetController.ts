@@ -1,7 +1,4 @@
 import express from 'express';
-import { User } from '../models/user.ts';
-import { OtpCode } from '../models/otpCode.ts';
-import { sendMail } from '../helpers/mailer.ts';
 import bcrypt from 'bcryptjs';
 import { generatePin } from '../helpers/index.ts';
 import { PasswordResetMail } from '../config/mails.ts';

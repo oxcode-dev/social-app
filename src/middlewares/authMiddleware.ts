@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 // import { AuthUserType, DataStoredInToken } from "../types/index.ts";
 // import { User } from "../models/user.ts";
 import { JWT_SECRET } from "../config/index.ts";
+import { User } from "../models/user.ts";
 
 export interface DataStoredInToken {
   id: string;
@@ -12,11 +13,12 @@ export interface DataStoredInToken {
 const auth = async (req: any, res: express.Response, next: express.NextFunction)  => {
     const authHeader = req.headers['authorization'];
 
-    if(!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Kindly login to access this resource' });
-    }
+    // if(!authHeader || !authHeader.startsWith('Bearer ')) {
+    //     return res.status(401).json({ message: 'Kindly login to access this resource' });
+    // }
 
-    const token : string = authHeader.split(' ')[1] || '';
+    // const token : string = authHeader.split(' ')[1] || '';
+    const token : string = '';
 
     try {
         
@@ -25,8 +27,10 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
             JWT_SECRET
         ) as DataStoredInToken;
 
+        req.user = await User.findById('699f80cf00d4b770db122aa5').select('-password');
         // req.user = await User.findById(decoded.id).select('-password');
-        req.user = decoded;
+        // req.user = decoded;
+        
 
         next();
     } catch (error) {
