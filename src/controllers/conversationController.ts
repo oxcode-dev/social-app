@@ -29,7 +29,6 @@ export const deleteChats = async (req: any, res: express.Response) => {
     const auth = req?.user;
     const chat_id = req.params.chatId
 
-    // const chats = await Chat.findOneAndDelete({
     const chats = await Chat.find({
         _id: chat_id,
     });
