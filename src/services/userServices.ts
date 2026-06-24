@@ -84,4 +84,3 @@ export const fetchUserAndFollowingsById = async (userId: string) => {
             select: "username id first_name last_name email",
         })
 }
-
