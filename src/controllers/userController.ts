@@ -14,24 +14,6 @@ export const getAllUsers = async (req: any, res: express.Response) => {
     res.status(200).json(data);
 }
 
-export const getUserFollowings = async (req: any, res: express.Response) => {
-    const user_id = req.params.id
-
-    const user = await fetchUserAndFollowingsById(user_id);
-
-    if (!user) {
-        res.status(400).json({ msg: "User does not exist." });
-    }
-
-    let data = {
-        status: "success",
-        message: "User followings retrieved successfully",
-        followings: user?.followings || [],
-    }
-
-    res.status(200).json(data);
-}
-
 export const getSuggestedUsers = async (req: any, res: express.Response) => {
 
     const { page, limit, skip } = req as PaginationType;
