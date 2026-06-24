@@ -11,3 +11,7 @@ router.put('/:id/unfollow', auth, unfollowUser as any)
 router.get('/:id/followers', auth, getUserFollowers)
 
 router.get('/:id/followings', auth, getUserFollowings)
+
+
+export { router as followingsRouter };
+
