@@ -23,6 +23,8 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
         _id: { $nin: excludedUsers },
     })
 
+    console.log(JSON.stringify(excludedUsers), req.user.followings, req.user.id);
+
     const users = await User.find({
             _id: { $nin: excludedUsers },
         })
@@ -34,7 +36,7 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
     return res.json({
         status: "success",
         users,
-        message: "Products retrieved successfully!!!",
+        message: "Suggested users retrieved successfully!!!",
         metadata: {
             page: page,
             perPage: limit,
