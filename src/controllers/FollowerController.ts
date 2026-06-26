@@ -1,6 +1,6 @@
 import express from 'express';
 import { fetchUserAndFollowingsById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from "../services/userServices.ts";
-import { RequestWithUser } from '../types/index.ts';
+import { type RequestWithUser } from '../types/index.ts';
 
 export const followUser = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
