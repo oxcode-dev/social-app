@@ -4,9 +4,31 @@ import { type RequestWithUser, type PaginationType } from '../types/index.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
 
-    const searchQuery = req.query?.search || '';
-    
     const users = await User.find()//.select('-password');
+
+    let data = {
+        users,
+        message: 'Users fetched succesfully!'
+    }
+
+    res.status(200).json(data);
+}
+
+export const searchUsers = async (req: any, res: express.Response) => {
+
+    const searchQuery = req.query?.search || '';
+
+    if (!searchQuery) {
+        return res.status(400).json({ msg: "Please enter a search query." });
+    }
+
+    const users = await User.find({
+      $or: [
+        { email: searchQuery.toLowerCase() },
+        { username: searchQuery.toLowerCase() }
+      ]
+    });
+
 
     let data = {
         users,
