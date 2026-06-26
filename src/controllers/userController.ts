@@ -1,7 +1,6 @@
 import express from 'express';
 import { User } from '../models/user.ts';
 import { type RequestWithUser, type PaginationType } from '../types/index.ts';
-import { fetchUserAndFollowingsById, fetchUserById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from '../services/userServices.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
     const users = await User.find()//.select('-password');
