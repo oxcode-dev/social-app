@@ -3,6 +3,9 @@ import { User } from '../models/user.ts';
 import { type RequestWithUser, type PaginationType } from '../types/index.ts';
 
 export const getAllUsers = async (req: any, res: express.Response) => {
+
+    const searchQuery = req.query?.search || '';
+    
     const users = await User.find()//.select('-password');
 
     let data = {
@@ -23,8 +26,6 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
         _id: { $nin: excludedUsers },
     })
 
-    console.log(JSON.stringify(excludedUsers), req.user.followings, req.user.id);
-
     const users = await User.find({
             _id: { $nin: excludedUsers },
         })
@@ -44,5 +45,4 @@ export const getSuggestedUsers = async (req: any, res: express.Response) => {
             totalPages: Math.ceil(totalCount / limit),
         }
     });
-    
 }
