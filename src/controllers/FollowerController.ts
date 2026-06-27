@@ -35,7 +35,6 @@ export const unfollowUser = async (req: RequestWithUser, res: express.Response) 
 export const getUserFollowers = async (req: any, res: express.Response) => {
     const user_id = req.params.id
 
-
     const user = await fetchUserAndFollowingsById(user_id)
 
     if (!user) {
