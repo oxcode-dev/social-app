@@ -53,7 +53,7 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
 export const getUserPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
 
-    const user_id = req.params.id as string;
+    const user_id = req.params.userId as string;
 
     const totalCount = await countAllUserPosts(user_id);
     const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
