@@ -62,7 +62,9 @@ userSchema
 userSchema.set('toObject', { virtuals: true });
 userSchema.set('toJSON', { virtuals: true });
 
-// userSchema.index({ email: 1 });
-// userSchema.index({ username: 1 });
+userSchema.index({ 
+    email: 1,
+    username: 1,
+}, { unique: true });
 
 export const User = mongoose.model('social_user', userSchema);
