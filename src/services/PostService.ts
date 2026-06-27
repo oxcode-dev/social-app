@@ -30,6 +30,23 @@ export const fetchUserPostsWithPagination = async (userId: string, skip: number,
         .limit(limit)
 }
 
+export const countFeedPosts = async (userIds: string[]) => {
+    return await Post.countDocuments({ postedBy: { $in: userIds } });
+}
+
+export const fetchFeedPosts = async (userIds: string[], skip: number, limit: number) => {
+    return await Post.find({ 
+            postedBy:{
+                $in: userIds
+            }
+        })
+        .populate("postedBy", "username id first_name last_name")
+        .populate("likes", "username id first_name last_name")
+        .populate("savedBy", "username id first_name last_name")
+        .sort({ createdAt: -1})
+        .skip(skip)
+        .limit(limit)
+}
 
 export const fetchPost = async (id: string) => {
     return await Post.findById(id)

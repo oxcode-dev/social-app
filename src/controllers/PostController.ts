@@ -6,6 +6,7 @@ import {
     countAllUserPosts,
     fetchUserPostsWithPagination,
 } from '../services/PostService.ts';
+import { Post } from '../models/post.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -76,22 +77,32 @@ export const getUserPosts = async (req: RequestWithUser & PaginationType, res: e
 export const getFeedPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
 
-    const user_id =  req.user._id as string;
+    const user_id =  req.user;
 
-    const totalCount = await countAllUserPosts(user_id);
-    const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
+    const feedUsers = [...req.user.followings, ...req.user.followers, req.user._id];
 
-    console.log(posts.length)
+
+    console.log(feedUsers)
+
+    // const totalCount = await countAllUserPosts(user_id);
+    // const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
+
+    const posts = await Post.find({
+        postedBy:{
+            $in: feedUsers
+        }
+    })
 
     let data = {
-        posts: posts,   
+        posts: posts, 
+        users: feedUsers,
         status: "success",
         message: "Posts retrieved successfully",
         metadata: {
             page: page,
             perPage: limit,
-            totalCount,
-            totalPages: Math.ceil(totalCount / limit),
+            // totalCount,
+            // totalPages: Math.ceil(totalCount / limit),
         }
     }
 
