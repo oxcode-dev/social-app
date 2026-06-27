@@ -45,6 +45,7 @@ export const getUserFollowers = async (req: any, res: express.Response) => {
         status: "success",
         message: "User followers retrieved successfully",
         followers: user?.followers || [],
+        totalFollowers: user?.followers?.length || 0,
     }
 
     res.status(200).json(data);
@@ -63,6 +64,7 @@ export const getUserFollowings = async (req: any, res: express.Response) => {
         status: "success",
         message: "User followings retrieved successfully",
         followings: user?.followings || [],
+        totalFollowings: user?.followings?.length || 0,
     }
 
     res.status(200).json(data);
