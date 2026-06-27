@@ -33,8 +33,6 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
     const totalCount = await countAllPosts();
     const posts = await fetchAllPostsWithPagination(skip, limit);
 
-    console.log(posts.length)
-
     let data = {
         posts: posts,   
         status: "success",
