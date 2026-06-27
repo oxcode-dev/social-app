@@ -10,6 +10,10 @@ export const countAllPosts = async () => {
     return await Post.countDocuments();
 }
 
+export const countAllUserPosts = async (userId: string) => {
+    return await Post.countDocuments({ postedBy: userId });
+}
+
 export const fetchAllPostsWithPagination = async (skip: number, limit: number) => {
     return await Post.find()
         .populate("postedBy", "username id first_name last_name")
@@ -17,6 +21,15 @@ export const fetchAllPostsWithPagination = async (skip: number, limit: number) =
         .skip(skip)
         .limit(limit)
 }
+
+export const fetchUserPostsWithPagination = async (userId: string, skip: number, limit: number) => {
+    return await Post.find({ postedBy: userId})
+        .populate("postedBy", "username id first_name last_name")
+        .sort({ createdAt: -1})
+        .skip(skip)
+        .limit(limit)
+}
+
 
 export const fetchPost = async (id: string) => {
     return await Post.findById(id)
