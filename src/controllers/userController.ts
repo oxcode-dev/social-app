@@ -22,11 +22,18 @@ export const searchUsers = async (req: any, res: express.Response) => {
         return res.status(400).json({ msg: "Please enter a search query." });
     }
 
+     // 1. Sanitize user input to escape special regex characters
+    const safeSearchTerm = searchQuery.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // 2. Create a case-insensitive regular expression
+    const regex = new RegExp(safeSearchTerm, 'i');
+
+    // 3. Query using $or to search both fields
     const users = await User.find({
-      $or: [
-        { email: searchQuery.toLowerCase() },
-        { username: searchQuery.toLowerCase() }
-      ]
+        $or: [
+            { username: { $regex: regex } },
+            { email: { $regex: regex } }
+        ]
     });
 
 
