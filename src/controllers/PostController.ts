@@ -3,6 +3,8 @@ import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
     countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, likeUnlikePostSystem, storePost, 
     storePostComment, saveUnsavePostSystem,
+    countAllUserPosts,
+    fetchUserPostsWithPagination,
 } from '../services/PostService.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
@@ -30,6 +32,31 @@ export const getPosts = async (req: RequestWithUser & PaginationType, res: expre
 
     const totalCount = await countAllPosts();
     const posts = await fetchAllPostsWithPagination(skip, limit);
+
+    console.log(posts.length)
+
+    let data = {
+        posts: posts,   
+        status: "success",
+        message: "Posts retrieved successfully",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
+    }
+
+    res.status(200).json(data);
+}
+
+export const getUserPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
+    const { page, limit, skip } = req as PaginationType;
+
+    const user_id = req.params.id as string;
+
+    const totalCount = await countAllUserPosts(user_id);
+    const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
 
     console.log(posts.length)
 
