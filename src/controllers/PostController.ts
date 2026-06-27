@@ -5,6 +5,8 @@ import {
     storePostComment, saveUnsavePostSystem,
     countAllUserPosts,
     fetchUserPostsWithPagination,
+    countFeedPosts,
+    fetchFeedPosts,
 } from '../services/PostService.ts';
 import { Post } from '../models/post.ts';
 
@@ -74,35 +76,26 @@ export const getUserPosts = async (req: RequestWithUser & PaginationType, res: e
     res.status(200).json(data);
 }
 
-export const getFeedPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
+// export const getFeedPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
+export const getFeedPosts = async (req: any, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
 
-    const user_id =  req.user;
+    const user =  req.user;
 
-    const feedUsers = [...req.user.followings, ...req.user.followers, req.user._id];
+    const feedUsers = [...user.followings, ...user.followers, user._id];
 
-
-    console.log(feedUsers)
-
-    // const totalCount = await countAllUserPosts(user_id);
-    // const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
-
-    const posts = await Post.find({
-        postedBy:{
-            $in: feedUsers
-        }
-    })
+    const totalCount = await countFeedPosts(feedUsers);
+    const posts = await fetchFeedPosts(feedUsers, skip, limit);
 
     let data = {
         posts: posts, 
-        users: feedUsers,
         status: "success",
         message: "Posts retrieved successfully",
         metadata: {
             page: page,
             perPage: limit,
-            // totalCount,
-            // totalPages: Math.ceil(totalCount / limit),
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
         }
     }
 
