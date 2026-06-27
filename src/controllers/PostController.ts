@@ -26,8 +26,6 @@ export const createPost = async (req: RequestWithUser, res: express.Response) =>
 }
 
 export const getPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
-    const auth = req?.user;
-
     const { page, limit, skip } = req as PaginationType;
 
     const totalCount = await countAllPosts();
