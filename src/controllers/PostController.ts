@@ -73,6 +73,31 @@ export const getUserPosts = async (req: RequestWithUser & PaginationType, res: e
     res.status(200).json(data);
 }
 
+export const getFeedPosts = async (req: RequestWithUser & PaginationType, res: express.Response) => {
+    const { page, limit, skip } = req as PaginationType;
+
+    const user_id =  req.user._id as string;
+
+    const totalCount = await countAllUserPosts(user_id);
+    const posts = await fetchUserPostsWithPagination(user_id, skip, limit);
+
+    console.log(posts.length)
+
+    let data = {
+        posts: posts,   
+        status: "success",
+        message: "Posts retrieved successfully",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
+    }
+
+    res.status(200).json(data);
+}
+
 export const getPost = async (req: express.Request | any, res: express.Response) => {
 
     const post = await fetchPost(req.params.id);

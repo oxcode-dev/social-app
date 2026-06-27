@@ -2,7 +2,7 @@ import express from 'express';
 
 import { validateInputData } from '../middlewares/validate.ts';
 import { 
-    addComments, createPost, deletePost, getPost, getPosts, getUserPosts, likeUnlikePost, 
+    addComments, createPost, deletePost, getFeedPosts, getPost, getPosts, getUserPosts, likeUnlikePost, 
     saveUnsavePost, updatePost 
 } from '../controllers/PostController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
@@ -24,6 +24,8 @@ router.post('/:id/save', auth, saveUnsavePost)
 router.delete('/:id/unsave', auth, saveUnsavePost)
 
 router.post('/:id/comments', auth, validateInputData(postCommentSchema), addComments)
+
+router.get('/feeds', auth, handlePagination as any, getFeedPosts as any);
 
 router.route('/:id')
     .get(auth, getPost)
