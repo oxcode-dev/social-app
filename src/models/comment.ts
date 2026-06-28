@@ -1,6 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 
-const commentSchema = new mongoose.Schema({
+
+export interface IPostComment {
+    post: string | mongoose.Schema.Types.ObjectId;
+    text: string;
+    user: string | mongoose.Schema.Types.ObjectId;
+    parentComment: string | mongoose.Schema.Types.ObjectId | null;
+    likes: string[] | mongoose.Schema.Types.ObjectId[];
+    repliesCount: number;
+}
+
+const commentSchema = new Schema<IPostComment>({
 
     post:{
         type:mongoose.Schema.Types.ObjectId,
