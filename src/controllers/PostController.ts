@@ -2,13 +2,12 @@ import express from 'express';
 import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
     countAllPosts, deletePostByIdAndAuthor, editPost, fetchAllPostsWithPagination, fetchPost, likeUnlikePostSystem, storePost, 
-    storePostComment, saveUnsavePostSystem,
+    saveUnsavePostSystem,
     countAllUserPosts,
     fetchUserPostsWithPagination,
     countFeedPosts,
     fetchFeedPosts,
 } from '../services/PostService.ts';
-import { Post } from '../models/post.ts';
 
 export const createPost = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
