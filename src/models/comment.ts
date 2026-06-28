@@ -1,7 +1,4 @@
-// models/Comment.js
-
 import mongoose, { Schema } from "mongoose";
-
 
 const commentSchema = new mongoose.Schema({
 
