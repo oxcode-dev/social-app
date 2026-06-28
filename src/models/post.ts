@@ -19,19 +19,10 @@ const postSchema = new Schema<IPost>({
             ref: "social_user",
         }
     ],
-    comments: [
-        {
-            user: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "social_user",
-            },
-            comment: {
-                type: String,
-                required: true,
-                trim: true,
-            }
-        }
-    ],
+    commentsCount:{
+        type:Number,
+        default:0
+    },
     savedBy: [
         {
             type: mongoose.Schema.Types.ObjectId,

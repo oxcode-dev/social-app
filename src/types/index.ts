@@ -53,10 +53,11 @@ export interface IPost {
     image?: string | null;
     postedBy: string | mongoose.Schema.Types.ObjectId;
     likes: string[]; // | mongoose.Schema.Types.ObjectId[];
-    comments: {
-        user: string | mongoose.Schema.Types.ObjectId;
-        comment: string;
-    }[];
+    commentsCount: number;
+    // comments: {
+    //     user: string | mongoose.Schema.Types.ObjectId;
+    //     comment: string;
+    // }[];
     savedBy: string[]; // | mongoose.Schema.Types.ObjectId[];
     createdAt: Date;
 }
