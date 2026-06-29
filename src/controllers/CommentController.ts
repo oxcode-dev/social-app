@@ -1,6 +1,5 @@
 import express from 'express';
 
-
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
     const auth = req.user;
