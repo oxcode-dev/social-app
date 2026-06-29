@@ -4,7 +4,7 @@ export const addComments = async (req: express.Request | any, res: express.Respo
     const postId = req.params.id as string;
     const auth = req.user;
 
-    const comment = req.body.comment as string;
+    const text = req.body.text as string;
     
     // let response: boolean = await storePostComment(postId, auth.id, comment);
     let response: boolean = true;

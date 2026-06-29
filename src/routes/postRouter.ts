@@ -23,6 +23,8 @@ router.delete('/:id/unlike', auth, likeUnlikePost)
 router.post('/:id/save', auth, saveUnsavePost)
 router.delete('/:id/unsave', auth, saveUnsavePost)
 
+// router.post('/:id/comments', auth, validateInputData(postCommentSchema), addComments)
+
 router.get('/feeds', auth, handlePagination as any, getFeedPosts as any);
 
 router.route('/:id')
