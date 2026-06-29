@@ -6,7 +6,7 @@ import {
     saveUnsavePost, updatePost 
 } from '../controllers/PostController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
-import { postCommentSchema, postDetailsSchema } from '../validations/postSchema.ts';
+import { postDetailsSchema } from '../validations/postSchema.ts';
 import { handlePagination } from '../middlewares/handlePagination.ts';
 
 const router = express.Router();
