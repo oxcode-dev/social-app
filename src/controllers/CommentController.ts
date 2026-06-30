@@ -1,9 +1,10 @@
 import express from 'express';
 import { fetchPost } from '../services/PostService.ts';
+import { storePostComment } from '../services/commentRepository.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
-    
+
     const auth = req.user;
 
     const text = req.body.text as string;
@@ -18,15 +19,12 @@ export const addComments = async (req: express.Request | any, res: express.Respo
     }
 
     
-    // let response: boolean = await storePostComment(postId, auth.id, comment);
-    let response: boolean = true;
-
-    if(!response) {
-        return res.status(404).json({
-            status: "error",
-            message: "Post not found!"
-        })
-    }
+    let response = await storePostComment({
+        postId, 
+        userId: auth.id, 
+        text,
+        parentCommentId: null
+    });
 
     return res.status(200).json({
         success: true,

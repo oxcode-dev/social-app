@@ -45,16 +45,3 @@ export const unLikePostComment = async (commentId: string, userId: string) => {
 
     return comment;
 }
-
-// post:{
-//     },
-//     user:{
-//     },
-//     text:{
-//     },
-//     parentComment:{
-//     },
-//     likes:[
-//     ],
-//     repliesCount:{
-//     }
