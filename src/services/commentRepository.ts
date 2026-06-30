@@ -52,3 +52,14 @@ export const unLikePostComment = async (commentId: string, userId: string) => {
 
     return comment;
 }
+
+export const deleteCommentPost = async (commentId: string, userId: string) => {
+    await Comment.deleteMany({
+        parentComment: commentId,
+    })
+
+    return await Comment.findOneAndDelete({
+        _id: commentId,
+        user: userId,
+    })
+}

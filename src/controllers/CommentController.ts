@@ -1,6 +1,7 @@
 import express from 'express';
 import { fetchPost } from '../services/PostService.ts';
-import { fetchPostComment, storePostComment } from '../services/commentRepository.ts';
+import { deleteCommentPost, fetchPostComment, storePostComment } from '../services/commentRepository.ts';
+import { success } from 'zod';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
@@ -60,4 +61,18 @@ export const replyToComment = async (req: express.Request | any, res: express.Re
         success: true,
         message: "Comment Added"
     });
+}
+
+export const deleteComment = async (req: express.Request | any, res: express.Response) => {
+    const commentId = req.params.id as string;
+
+    const auth = req.user;
+
+    await deleteCommentPost(commentId, auth.id);
+
+    return res.status(200).json({
+        success: true,
+        message: "Comment Deleted Successfully!"
+    })
+
 }
