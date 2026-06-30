@@ -6,7 +6,8 @@ import {
     countCommentReplies,
     fetchCommentReplies,
 } from '../services/commentRepository.ts';
-import { PaginationType } from '../types/index.ts';
+
+import { type PaginationType } from '../types/index.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;

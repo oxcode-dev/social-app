@@ -6,8 +6,9 @@ import {
     saveUnsavePost, updatePost 
 } from '../controllers/PostController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
-import { postDetailsSchema } from '../validations/postSchema.ts';
+import { postCommentSchema, postDetailsSchema } from '../validations/postSchema.ts';
 import { handlePagination } from '../middlewares/handlePagination.ts';
+import { addComments, getPostComments } from '../controllers/CommentController.ts';
 
 const router = express.Router();
 
@@ -23,7 +24,9 @@ router.delete('/:id/unlike', auth, likeUnlikePost)
 router.post('/:id/save', auth, saveUnsavePost)
 router.delete('/:id/unsave', auth, saveUnsavePost)
 
-// router.post('/:id/comments', auth, validateInputData(postCommentSchema), addComments)
+router.post('/:id/comments', auth, validateInputData(postCommentSchema), addComments as any);
+
+router.get('/:id/comments', auth, getPostComments as any);
 
 router.get('/feeds', auth, handlePagination as any, getFeedPosts as any);
 
