@@ -8,7 +8,20 @@ type storePostCommentType = {
     parentCommentId: string | null
 }
 
-export const fetchPostComment = async (commentId: string) => {
+export const countCommentsByPostId = async (postId: string) => {
+    return await Comment.countDocuments({ post: postId, parentComment: null });
+}
+
+export const fetchCommentsByPostId = async (postId: string, skip: number, limit: number) => {
+    return await Comment.find({ post: postId, parentComment: null })
+        .populate("user", "username id first_name last_name")
+        .populate("post", "caption image id")
+        .populate("replies", "text user createdAt") 
+        .skip(skip)
+        .limit(limit)
+}
+
+export const fetchComment = async (commentId: string) => {
     return await Comment.findById(commentId)
         .populate("user", "username id first_name last_name")
         .populate("post", "caption image id")

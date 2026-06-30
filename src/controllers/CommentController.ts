@@ -1,6 +1,9 @@
 import express from 'express';
 import { fetchPost } from '../services/PostService.ts';
-import { deleteCommentPost, fetchPostComment, storePostComment, likeComment, unLikeComment } from '../services/commentRepository.ts';
+import { 
+    deleteCommentPost, fetchComment, storePostComment, likeComment, unLikeComment,
+    countCommentsByPostId, fetchCommentsByPostId,
+} from '../services/commentRepository.ts';
 import { PaginationType } from '../types/index.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
@@ -39,8 +42,8 @@ export const getPostComments = async (req: any, res: express.Response) => {
 
     const { page, limit, skip } = req as PaginationType;
 
-    const totalCount = await countFeedPosts();
-    const posts = await fetchFeedPosts(feedUsers, skip, limit);
+    const totalCount = await countCommentsByPostId(postId);
+    const posts = await fetchCommentsByPostId(postId, skip, limit);
 
     let data = {
         comments: posts, 
@@ -64,7 +67,7 @@ export const replyToComment = async (req: express.Request | any, res: express.Re
 
     const text = req.body.text as string;
 
-    const comment = await fetchPostComment(commentId);
+    const comment = await fetchComment(commentId);
 
     if(!comment) {
         return res.status(404).json({
