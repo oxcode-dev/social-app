@@ -1,6 +1,6 @@
 import express from 'express';
 import { fetchPost } from '../services/PostService.ts';
-import { storePostComment } from '../services/commentRepository.ts';
+import { fetchPostComment, storePostComment } from '../services/commentRepository.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
@@ -20,8 +20,8 @@ export const addComments = async (req: express.Request | any, res: express.Respo
 
     
     let response = await storePostComment({
-        postId, 
-        userId: auth.id, 
+        post: postId, 
+        user: auth.id, 
         text,
         parentCommentId: null
     });
@@ -34,27 +34,26 @@ export const addComments = async (req: express.Request | any, res: express.Respo
 }
 
 export const replyToComment = async (req: express.Request | any, res: express.Response) => {
-    const postId = req.params.id as string;
+    const commentId = req.params.id as string;
 
     const auth = req.user;
 
     const text = req.body.text as string;
 
-    const post = await fetchPost(postId);
+    const comment = await fetchPostComment(commentId);
 
-    if(!post) {
+    if(!comment) {
         return res.status(404).json({
             status: "error",
             message: "Post not found!",
         })
     }
-
     
-    let response = await storePostComment({
-        postId, 
-        userId: auth.id, 
+    await storePostComment({
+        post: comment.post.toString() || '', 
+        user: auth.id, 
         text,
-        parentCommentId: null
+        parentCommentId: commentId
     });
 
     return res.status(200).json({
