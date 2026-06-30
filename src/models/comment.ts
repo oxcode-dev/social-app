@@ -56,4 +56,4 @@ const commentSchema = new Schema<IPostComment>({
     timestamps:true
 });
 
-export const Post = mongoose.model('social_post_comments', commentSchema);
+export const Comment = mongoose.model('social_post_comments', commentSchema);
