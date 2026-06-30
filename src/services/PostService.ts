@@ -143,3 +143,15 @@ export const saveUnsavePostSystem = async (postId: string, userId: string) => {
     }
     return response;
 }
+
+export const updatePostCommentsCount = async (postId: string) => {
+    await Post.findByIdAndUpdate(
+        postId,
+        {
+            $inc:{
+                commentsCount:1
+            }
+        }
+    );
+
+}
