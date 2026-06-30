@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import { Comment } from "../models/comment.ts";
 
 
@@ -76,3 +77,16 @@ export const deleteCommentPost = async (commentId: string, userId: string) => {
         user: userId,
     })
 }
+
+export const countCommentReplies = async (commentId: string) => {
+    return await Comment.countDocuments({ parentComment: commentId });
+}
+
+export const fetchCommentReplies = async (commentId: string, skip: number, limit: number) => {
+    return await Comment.find({ parentComment: commentId })
+        .populate("user", "username id first_name last_name")
+        .populate("post", "caption image id")
+        .populate("replies", "text user createdAt") 
+        .skip(skip)
+        .limit(limit)
+}       
