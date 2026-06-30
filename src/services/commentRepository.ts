@@ -29,7 +29,7 @@ export const storePostComment = async (commentData: storePostCommentType) => {
 
 }
 
-export const likePostComment = async (commentId: string, userId: string) => {
+export const likeComment = async (commentId: string, userId: string) => {
     const comment = await Comment.findByIdAndUpdate(commentId, {
         $addToSet: { likes: userId }
     }, { new: true });
@@ -41,7 +41,7 @@ export const likePostComment = async (commentId: string, userId: string) => {
     return comment;
 }
 
-export const unLikePostComment = async (commentId: string, userId: string) => {
+export const unLikeComment = async (commentId: string, userId: string) => {
     const comment = await Comment.findByIdAndUpdate(commentId, {
         $pull: { likes: userId }
     }, { new: true });
