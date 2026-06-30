@@ -84,6 +84,43 @@ export const getComment = async (req: express.Request | any, res: express.Respon
     res.status(200).json(data);
 }
 
+export const deleteComment = async (req: express.Request | any, res: express.Response) => {
+    const commentId = req.params.id as string;
+
+    const auth = req.user;
+
+    await deleteCommentPost(commentId, auth.id);
+
+    return res.status(200).json({
+        success: true,
+        message: "Comment Deleted Successfully!"
+    })
+}
+
+export const likePostComment = async (req: express.Request | any, res: express.Response) => {
+    const commentId = req.params.id as string;
+    const auth = req.user;
+
+    await likeComment(commentId, auth.id);
+
+    return res.status(200).json({
+        success: true,
+        message: "Comment Liked Successfully!"
+    })
+}
+
+export const unLikePostComment = async (req: express.Request | any, res: express.Response) => {
+    const commentId = req.params.id as string;
+    const auth = req.user;
+
+    await unLikeComment(commentId, auth.id);
+
+    return res.status(200).json({
+        success: true,
+        message: "Comment Unliked Successfully!"
+    })
+}
+
 export const replyToComment = async (req: express.Request | any, res: express.Response) => {
     const commentId = req.params.id as string;
 
@@ -134,41 +171,4 @@ export const getCommentReplies = async (req: any, res: express.Response) => {
     }
 
     res.status(200).json(data);
-}
-
-export const deleteComment = async (req: express.Request | any, res: express.Response) => {
-    const commentId = req.params.id as string;
-
-    const auth = req.user;
-
-    await deleteCommentPost(commentId, auth.id);
-
-    return res.status(200).json({
-        success: true,
-        message: "Comment Deleted Successfully!"
-    })
-}
-
-export const likePostComment = async (req: express.Request | any, res: express.Response) => {
-    const commentId = req.params.id as string;
-    const auth = req.user;
-
-    await likeComment(commentId, auth.id);
-
-    return res.status(200).json({
-        success: true,
-        message: "Comment Liked Successfully!"
-    })
-}
-
-export const unLikePostComment = async (req: express.Request | any, res: express.Response) => {
-    const commentId = req.params.id as string;
-    const auth = req.user;
-
-    await unLikeComment(commentId, auth.id);
-
-    return res.status(200).json({
-        success: true,
-        message: "Comment Unliked Successfully!"
-    })
 }
