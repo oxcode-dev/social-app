@@ -3,6 +3,8 @@ import { fetchPost } from '../services/PostService.ts';
 import { 
     deleteCommentPost, fetchComment, storePostComment, likeComment, unLikeComment,
     countCommentsByPostId, fetchCommentsByPostId,
+    countCommentReplies,
+    fetchCommentReplies,
 } from '../services/commentRepository.ts';
 import { PaginationType } from '../types/index.ts';
 
@@ -43,10 +45,10 @@ export const getPostComments = async (req: any, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
 
     const totalCount = await countCommentsByPostId(postId);
-    const posts = await fetchCommentsByPostId(postId, skip, limit);
+    const comments = await fetchCommentsByPostId(postId, skip, limit);
 
     let data = {
-        comments: posts, 
+        comments: comments, 
         status: "success",
         message: "Posts retrieved successfully",
         metadata: {
@@ -87,6 +89,29 @@ export const replyToComment = async (req: express.Request | any, res: express.Re
         success: true,
         message: "Comment Added"
     });
+}
+
+export const getCommentReplies = async (req: any, res: express.Response) => {
+    const commentId = req.params.id as string;
+
+    const { page, limit, skip } = req as PaginationType;    
+
+    const totalCount = await countCommentReplies(commentId);
+    const replies = await fetchCommentReplies(commentId, skip, limit);
+
+    let data = {
+        replies: replies, 
+        status: "success",
+        message: "Comment replies retrieved successfully",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
+    }
+
+    res.status(200).json(data);
 }
 
 export const deleteComment = async (req: express.Request | any, res: express.Response) => {
