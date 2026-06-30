@@ -1,6 +1,7 @@
 import express from 'express';
 import { fetchPost } from '../services/PostService.ts';
 import { deleteCommentPost, fetchPostComment, storePostComment, likeComment, unLikeComment } from '../services/commentRepository.ts';
+import { PaginationType } from '../types/index.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
@@ -31,6 +32,29 @@ export const addComments = async (req: express.Request | any, res: express.Respo
         message: "Comment Added",
         comment: response,
     });
+}
+
+export const getPostComments = async (req: any, res: express.Response) => {
+    const postId = req.params.id as string;
+
+    const { page, limit, skip } = req as PaginationType;
+
+    const totalCount = await countFeedPosts();
+    const posts = await fetchFeedPosts(feedUsers, skip, limit);
+
+    let data = {
+        comments: posts, 
+        status: "success",
+        message: "Posts retrieved successfully",
+        metadata: {
+            page: page,
+            perPage: limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        }
+    }
+
+    res.status(200).json(data);
 }
 
 export const replyToComment = async (req: express.Request | any, res: express.Response) => {
