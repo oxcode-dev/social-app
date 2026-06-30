@@ -62,6 +62,27 @@ export const getPostComments = async (req: any, res: express.Response) => {
     res.status(200).json(data);
 }
 
+export const getComment = async (req: express.Request | any, res: express.Response) => {
+    const commentId = req.params.id as string;
+
+    const comment = await fetchComment(commentId);
+
+    if(!comment) {
+        return res.status(404).json({
+            status: "error",
+            message: "Comment not found!",
+        })
+    }
+
+    let data = {
+        comment: comment, 
+        status: "success",
+        message: "Comment retrieved successfully",
+    }
+
+    res.status(200).json(data);
+}
+
 export const replyToComment = async (req: express.Request | any, res: express.Response) => {
     const commentId = req.params.id as string;
 
