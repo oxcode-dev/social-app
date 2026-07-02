@@ -2,7 +2,7 @@ import { Chat } from "../models/chat.ts";
 import { Conversation } from "../models/conversation.ts";
 
 export const storeMessage = async (userId: string, recipientId: string, text: string) => {
-    const newChat = await Chat.findOneAndUpdate(
+    const chat = await Chat.findOneAndUpdate(
         {
             $or: [
                 { recipients: [userId, recipientId] },
@@ -17,7 +17,7 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
     );
 
     const conversation = new Conversation({
-        chatId: newChat._id,
+        chatId: chat._id,
         sender: userId,
         receiver: recipientId,
         content: text,

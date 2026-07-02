@@ -14,7 +14,7 @@ const routes = (app: express.Application) => {
     app.use('/api/password', passwordResetRouter)
     app.use('/api/profile', profileRouter)
     app.use('/api/posts', postsRouter)
-    app.use('/api/chats', chatsRouter)
+    app.use('/api/conversations', chatsRouter)
     app.use('/api/users', userRouter)
     app.use('/api/followings', followingsRouter)
 
