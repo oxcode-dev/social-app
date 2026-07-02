@@ -17,6 +17,7 @@ export const countAllUserPosts = async (userId: string) => {
 export const fetchAllPostsWithPagination = async (skip: number, limit: number) => {
     return await Post.find()
         .populate("postedBy", "username id first_name last_name")
+        .populate("likes", "username id first_name last_name")
         .sort({ createdAt: -1})
         .skip(skip)
         .limit(limit)

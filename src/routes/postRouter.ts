@@ -20,6 +20,7 @@ router.get('/user/:userId', auth, handlePagination as any, getUserPosts as any);
 
 router.post('/:id/like', auth, likeUnlikePost)
 router.delete('/:id/unlike', auth, likeUnlikePost)
+router.get('/:id/unlikes', auth, likeUnlikePost)
 
 router.post('/:id/save', auth, saveUnsavePost)
 router.delete('/:id/unsave', auth, saveUnsavePost)
