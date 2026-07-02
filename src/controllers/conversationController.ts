@@ -17,11 +17,11 @@ export const sendMessage = async (req: any, res: express.Response) => {
 export const getConversations = async (req: any, res: express.Response) => {
     const auth = req?.user;
 
-    const chats = await fetchAllConversations(auth?._id);
+    const conversations = await fetchAllConversations(auth?._id);
 
     res.status(200).json({
         success: true,
-        chats
+        conversations
     });
 }
 

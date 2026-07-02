@@ -4,7 +4,7 @@ import { authRouter } from './authRoute.ts';
 import { passwordResetRouter } from './passwordResetRouter.ts';
 import { profileRouter } from './profileRouter.ts';
 import { postsRouter } from './postRouter.ts';
-import { chatsRouter } from './chatRoute.ts';
+import { chatsRouter } from './conversationRoute.ts';
 import { userRouter } from './userRoute.ts';
 import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
