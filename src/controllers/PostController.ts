@@ -181,6 +181,26 @@ export const likeUnlikePost = async (req: any, res: express.Response) => {
     });
 }
 
+export const getPostLikes = async (req: express.Request | any, res: express.Response) => {
+    const postId = req.params.id;
+
+    const post = await fetchPost(postId);
+    
+    if (!post) {
+        return res.status(404).send({
+            message: "Post not found!",
+        })
+    }
+
+    let data = {
+        likes: post.likes,
+        status: "success",
+        message: "Post Likes retrieved successfully!!!"
+    }
+
+    res.status(200).json(data);
+}
+
 export const saveUnsavePost = async (req: express.Request | any, res: express.Response) => {
     const auth = req.user;
     

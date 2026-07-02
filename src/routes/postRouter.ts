@@ -2,8 +2,8 @@ import express from 'express';
 
 import { validateInputData } from '../middlewares/validate.ts';
 import { 
-    createPost, deletePost, getFeedPosts, getPost, getPosts, getUserPosts, likeUnlikePost, 
-    saveUnsavePost, updatePost 
+    createPost, deletePost, getFeedPosts, getPost, getPostLikes, getPosts, getUserPosts, likeUnlikePost, 
+    saveUnsavePost, updatePost,
 } from '../controllers/PostController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 import { postCommentSchema, postDetailsSchema } from '../validations/postSchema.ts';
@@ -20,7 +20,7 @@ router.get('/user/:userId', auth, handlePagination as any, getUserPosts as any);
 
 router.post('/:id/like', auth, likeUnlikePost)
 router.delete('/:id/unlike', auth, likeUnlikePost)
-router.get('/:id/unlikes', auth, likeUnlikePost)
+router.get('/:id/likes', auth, getPostLikes)
 
 router.post('/:id/save', auth, saveUnsavePost)
 router.delete('/:id/unsave', auth, saveUnsavePost)
