@@ -26,7 +26,7 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
     await conversation.save();
 }
 
-export const fetchAllChats = async (userId: string) => {
+export const fetchAllConversations = async (userId: string) => {
     return await Conversation.find({
         // participants: req.user.id
         recipients: {
