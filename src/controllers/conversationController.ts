@@ -25,7 +25,7 @@ export const getConversations = async (req: any, res: express.Response) => {
     });
 }
 
-export const deleteChats = async (req: any, res: express.Response) => {
+export const deleteConversation = async (req: any, res: express.Response) => {
     const auth = req?.user;
     const chat_id = req.params.chatId
 

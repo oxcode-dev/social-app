@@ -4,7 +4,7 @@ import { authRouter } from './authRoute.ts';
 import { passwordResetRouter } from './passwordResetRouter.ts';
 import { profileRouter } from './profileRouter.ts';
 import { postsRouter } from './postRouter.ts';
-import { chatsRouter } from './conversationRoute.ts';
+import { conversationRouter } from './conversationRoute.ts';
 import { userRouter } from './userRoute.ts';
 import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
@@ -14,7 +14,7 @@ const routes = (app: express.Application) => {
     app.use('/api/password', passwordResetRouter)
     app.use('/api/profile', profileRouter)
     app.use('/api/posts', postsRouter)
-    app.use('/api/conversations', chatsRouter)
+    app.use('/api/conversations', conversationRouter)
     app.use('/api/users', userRouter)
     app.use('/api/followings', followingsRouter)
 
