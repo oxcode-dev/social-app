@@ -8,7 +8,7 @@ router.route('/')
     .post(auth, sendMessage)
     .get(auth, getConversations)
 
-router.delete('/:chatId', deleteConversation)
+router.delete('/:conversationId', deleteConversation)
 
 router.get('/:chatId', getChatConversations);
 

@@ -19,7 +19,7 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
     );
 
     const chat = new Chat({
-        conversationId: conversation._id,
+        conversation: conversation._id,
         sender: userId,
         receiver: recipientId,
         content: text,
@@ -46,4 +46,14 @@ export const fetchChatConversations = async (chatId: string) => {
     return await Conversation.find({
         chatId: chatId
     }).populate("receiver sender");
+}
+
+export const deleteConversationById = async(conversationId: string) => {
+    await Conversation.find({
+        _id: conversationId,
+    });
+
+    await Chat.deleteMany({
+        conversation: conversationId,
+    });
 }

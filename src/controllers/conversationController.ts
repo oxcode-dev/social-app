@@ -1,7 +1,7 @@
 import express from "express"
 import { Conversation } from "../models/conversation.ts";
 import { Chat } from "../models/chat.ts";
-import { fetchAllConversations, fetchChatConversations, storeMessage } from "../services/conversationService.ts";
+import { deleteConversationById, fetchAllConversations, fetchChatConversations, storeMessage } from "../services/conversationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
     const auth = req?.user;
@@ -27,21 +27,14 @@ export const getConversations = async (req: any, res: express.Response) => {
 
 export const deleteConversation = async (req: any, res: express.Response) => {
     const auth = req?.user;
-    const chat_id = req.params.chatId
+    const conversationId = req.params.conversationId as string;
 
-    const chats = await Chat.find({
-        _id: chat_id,
-    });
-
-    const conversations = await Conversation.deleteMany({
-        chatId: chat_id,
-    });
+    await deleteConversationById(conversationId);
 
 
     res.status(200).json({
         success: true,
-        chats,
-        conversations,
+        message: "Conversation deleted successfully",
     });
 }
 
