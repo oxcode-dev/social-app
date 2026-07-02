@@ -41,5 +41,5 @@ chatSchema.index({
     createdAt: -1
 });
 
-export const Chat = mongoose.model('social_conversations', chatSchema);
+export const Chat = mongoose.model('social_chats', chatSchema);
 
