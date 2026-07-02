@@ -1,34 +1,35 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-export interface IConversation {
-  _id: string;
-  sender: string | mongoose.Schema.Types.ObjectId;
-  receiver: string | mongoose.Schema.Types.ObjectId;
-  chatId: string | mongoose.Schema.Types.ObjectId;
-  content: string;
-}
+const conversationSchema = new mongoose.Schema(
+    {
+        recipients: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "social_user"
+            }
+        ],
+        latestMessage: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+            lastActivity: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    { timestamps: true }
+);
 
-const conversationSchema = new Schema<IConversation>({
-    sender: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "social_user"
-    },
-    receiver: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "social_user"
-    },
-    chatId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "social_chats"
-    },
-    content: {
-        type: String,
-        trim: true,
-        required: true,
-    },
-}, { timestamps: true });
+conversationSchema.index({
+    recipients: 1
+});
+
+conversationSchema.index({
+    lastActivity: -1
+});
 
 conversationSchema.set('toObject', { virtuals: true });
 conversationSchema.set('toJSON', { virtuals: true });
 
-export const Conversation = mongoose.model('social_conversations', conversationSchema);
+export const Conversation = mongoose.model('social_chats', conversationSchema);
