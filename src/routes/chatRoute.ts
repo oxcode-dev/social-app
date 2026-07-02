@@ -1,12 +1,12 @@
 import express from 'express';
-import { deleteChats, getChatConversations, getChats, sendMessage } from '../controllers/conversationController.ts';
+import { deleteChats, getChatConversations, getConversations, sendMessage } from '../controllers/conversationController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 
 const router = express.Router();
 
 router.route('/')
     .post(auth, sendMessage)
-    .get(auth, getChats)
+    .get(auth, getConversations)
 
 router.delete('/:chatId', deleteChats)
 

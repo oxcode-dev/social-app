@@ -14,7 +14,7 @@ export const sendMessage = async (req: any, res: express.Response) => {
     res.status(201).json({ msg: "Created." });
 }
 
-export const getChats = async (req: any, res: express.Response) => {
+export const getConversations = async (req: any, res: express.Response) => {
     const auth = req?.user;
 
     const chats = await fetchAllChats(auth?._id);

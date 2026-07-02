@@ -27,11 +27,17 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
 }
 
 export const fetchAllChats = async (userId: string) => {
-    return await Chat.find({
+    return await Conversation.find({
+        // participants: req.user.id
         recipients: {
             $in: [userId]
         }
-    }).sort({ updatedAt: -1 }).populate("recipients latestMessage");
+    })
+    .populate("recipients", "username profilePic")
+    .populate("latestMessage")
+    .sort({
+        lastActivity: -1
+    });
 }
 
 export const fetchChatConversations = async (chatId: string) => {
