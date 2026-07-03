@@ -70,3 +70,9 @@ export const deleteConversationById = async(conversationId: string) => {
         conversation: conversationId,
     });
 }
+
+export const deleteChatById = async(chatId: string) => {
+    await Chat.findOneAndDelete({
+        _id: chatId
+    })
+}
