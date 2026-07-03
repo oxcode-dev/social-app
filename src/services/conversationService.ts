@@ -36,6 +36,7 @@ export const fetchAllConversations = async (userId: string) => {
     .populate({
         path: "recipients",
         select: "username id first_name last_name email",
+        options: { limit: 2 }
     })
     .sort({
         lastActivity: -1
