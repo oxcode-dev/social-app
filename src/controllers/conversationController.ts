@@ -81,3 +81,11 @@ export const deleteChat = async (req: express.Request, res: express.Response) =>
         message: "Chats deleted successfully"
     });
 }
+
+export const markAsRead = async (req: express.Request, res: express.Response) => {
+    
+}
+
+export const readChat = async (req: express.Request, res: express.Response) => {
+
+}
