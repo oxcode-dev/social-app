@@ -35,7 +35,7 @@ export const fetchAllConversations = async (userId: string) => {
     })
     .populate({
         path: "recipients",
-        select: "username id first_name last_name email",
+        select: "username id first_name last_name avatar email",
         options: { limit: 2 }
     })
     .sort({
@@ -46,18 +46,19 @@ export const fetchAllConversations = async (userId: string) => {
 
 export const fetchConversationById = async (conversationId: string) => {
     return await Conversation.findById(conversationId)
-        .populate("recipients", "username avatar first_name last_name")
-        // .populate("recipients")
+        .populate("recipients", "username avatar first_name last_name avatar")
         .sort({
             lastActivity: -1
         })
         .exec();
 }
 
-export const fetchChatConversations = async (chatId: string) => {
-    return await Conversation.find({
-        chatId: chatId
-    }).populate("receiver sender");
+export const fetchConversationChats = async (conversationId: string) => {
+    return await Chat.find({
+        conversation: conversationId
+    })
+    .populate("receiver", "username avatar first_name last_name avatar")
+    .populate("sender", "username avatar first_name last_name avatar");
 }
 
 export const deleteConversationById = async(conversationId: string) => {

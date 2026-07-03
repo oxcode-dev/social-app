@@ -1,6 +1,6 @@
 import express from 'express';
 import { 
-    deleteConversation, getChatConversations, getConversations, getConversationById, sendMessage 
+    deleteConversation, getConversationChats, getConversations, getConversationById, sendMessage 
 } from '../controllers/conversationController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 
@@ -10,10 +10,10 @@ router.route('/')
     .post(auth, sendMessage)
     .get(auth, getConversations)
 
+router.get('/:conversationId/chats', getConversationChats);
+
 router.route('/:conversationId')
     .get(auth, getConversationById)
     .delete(auth, deleteConversation)
-
-router.get('/:chatId', getChatConversations);
 
 export { router as conversationRouter };
