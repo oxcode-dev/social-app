@@ -1,7 +1,8 @@
 import express from "express"
 import {
     deleteConversationById, fetchAllConversations, fetchConversationChats, fetchConversationById, storeMessage, 
-    deleteChatById
+    deleteChatById,
+    markConversationChatsAsRead
 } from "../services/conversationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
@@ -82,7 +83,16 @@ export const deleteChat = async (req: express.Request, res: express.Response) =>
     });
 }
 
-export const markAsRead = async (req: express.Request, res: express.Response) => {
+export const markAsRead = async (req: express.Request | any, res: express.Response) => {
+    const conversationId = req.params.conversationId as string;
+    const auth = req?.user;
+
+    await markConversationChatsAsRead(conversationId, auth.id);
+
+    res.json({
+        success: true,
+        message: "Chats marked as read successfully"
+    });
     
 }
 

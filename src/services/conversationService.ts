@@ -76,3 +76,16 @@ export const deleteChatById = async(chatId: string) => {
         _id: chatId
     })
 }
+
+export const markConversationChatsAsRead = async (conversationId: string, userId: string) => {
+    await Chat.updateMany(
+        {
+            conversation: conversationId,
+            sender: { $ne: userId },
+            isRead: false
+        },
+        {
+            isRead: true
+        }
+    );
+}
