@@ -1,7 +1,7 @@
 import express from "express"
 import { Conversation } from "../models/conversation.ts";
 import { Chat } from "../models/chat.ts";
-import { deleteConversationById, fetchAllConversations, fetchChatConversations, storeMessage } from "../services/conversationService.ts";
+import { deleteConversationById, fetchAllConversations, fetchChatConversations, fetchConversationById, storeMessage } from "../services/conversationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
     const auth = req?.user;
@@ -23,6 +23,26 @@ export const getConversations = async (req: any, res: express.Response) => {
         success: true,
         conversations
     });
+}
+
+export const getConversationById = async (req: express.Request, res: express.Response) => {
+    const conversationId = req.params.conversationId as string;
+
+    const conversation = await fetchConversationById(conversationId);
+
+    if (!conversation) {
+        return res.status(404).send({
+            message: "Conversation not found!",
+        })
+    }
+
+    let data = {
+        conversation,
+        status: "success",
+        message: "Conversation fetched successfully!!!",
+    }
+
+    res.status(200).json(data);
 }
 
 export const deleteConversation = async (req: any, res: express.Response) => {

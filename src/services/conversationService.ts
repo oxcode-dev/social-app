@@ -2,7 +2,6 @@ import { Chat } from "../models/chat.ts";
 import { Conversation } from "../models/conversation.ts";
 
 export const storeMessage = async (userId: string, recipientId: string, text: string) => {
-    // return console.log(userId, recipientId, text)
     const conversation = await Conversation.findOneAndUpdate(
         {
             $or: [
@@ -30,16 +29,25 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
 
 export const fetchAllConversations = async (userId: string) => {
     return await Conversation.find({
-        // participants: req.user.id
-        recipients: {
-            $in: [userId]
-        }
+        recipients: userId
+        // recipients: {
+        //     $in: [userId]
+        // }
     })
-    .populate("recipients", "username profilePic")
+    .populate("recipients", "username avatar firstName lastName")
     .populate("latestMessage")
     .sort({
         lastActivity: -1
     });
+}
+
+export const fetchConversationById = async (conversationId: string) => {
+    return await Conversation.findById(conversationId)
+        .populate("recipients", "username avatar firstName lastName")
+        .populate("latestMessage")
+        .sort({
+            lastActivity: -1
+        });
 }
 
 export const fetchChatConversations = async (chatId: string) => {
