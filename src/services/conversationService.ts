@@ -29,25 +29,28 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
 
 export const fetchAllConversations = async (userId: string) => {
     return await Conversation.find({
-        // recipients: userId
         recipients: {
             $in: [userId]
         }
     })
-    .populate("recipients", "username avatar first_name last_name")
-    .populate("latestMessage")
+    .populate({
+        path: "recipients",
+        select: "username id first_name last_name email",
+    })
     .sort({
         lastActivity: -1
-    });
+    })
+    .exec();
 }
 
 export const fetchConversationById = async (conversationId: string) => {
     return await Conversation.findById(conversationId)
         .populate("recipients", "username avatar first_name last_name")
-        .populate("latestMessage")
+        // .populate("recipients")
         .sort({
             lastActivity: -1
-        });
+        })
+        .exec();
 }
 
 export const fetchChatConversations = async (chatId: string) => {
