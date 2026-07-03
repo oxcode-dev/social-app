@@ -38,6 +38,7 @@ export const getConversationById = async (req: express.Request, res: express.Res
 
     let data = {
         conversation,
+        recipients: conversation.recipients,
         status: "success",
         message: "Conversation fetched successfully!!!",
     }

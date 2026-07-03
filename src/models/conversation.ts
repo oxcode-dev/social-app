@@ -5,7 +5,8 @@ const conversationSchema = new mongoose.Schema(
         recipients: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "social_user"
+                ref: "social_user",
+                required: true,
             }
         ],
         latestMessage: {
@@ -16,7 +17,7 @@ const conversationSchema = new mongoose.Schema(
             lastActivity: {
             type: Date,
             default: Date.now
-        }
+        },
     },
     { timestamps: true }
 );

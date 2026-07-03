@@ -29,12 +29,12 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
 
 export const fetchAllConversations = async (userId: string) => {
     return await Conversation.find({
-        recipients: userId
-        // recipients: {
-        //     $in: [userId]
-        // }
+        // recipients: userId
+        recipients: {
+            $in: [userId]
+        }
     })
-    .populate("recipients", "username avatar firstName lastName")
+    .populate("recipients", "username avatar first_name last_name")
     .populate("latestMessage")
     .sort({
         lastActivity: -1
@@ -43,7 +43,7 @@ export const fetchAllConversations = async (userId: string) => {
 
 export const fetchConversationById = async (conversationId: string) => {
     return await Conversation.findById(conversationId)
-        .populate("recipients", "username avatar firstName lastName")
+        .populate("recipients", "username avatar first_name last_name")
         .populate("latestMessage")
         .sort({
             lastActivity: -1
