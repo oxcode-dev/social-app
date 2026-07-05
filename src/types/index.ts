@@ -66,13 +66,13 @@ export interface NotificationType {
 
     io: any
 
-    recipient: string | mongoose.Schema.Types.ObjectId,
+    recipient: string //| mongoose.Schema.Types.ObjectId,
 
-    sender: string | mongoose.Schema.Types.ObjectId,
+    sender: string //| mongoose.Schema.Types.ObjectId,
 
     type: string,
 
-    post: string | mongoose.Schema.Types.ObjectId | null,
+    post: string | null //| mongoose.Schema.Types.ObjectId | null,
 
     comment: string |  null,
 
