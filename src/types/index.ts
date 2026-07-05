@@ -61,3 +61,20 @@ export interface IPost {
     savedBy: string[]; // | mongoose.Schema.Types.ObjectId[];
     createdAt: Date;
 }
+
+export interface NotificationType {
+
+    io: any
+
+    recipient: string | mongoose.Schema.Types.ObjectId,
+
+    sender: string | mongoose.Schema.Types.ObjectId,
+
+    type: string,
+
+    post: string | mongoose.Schema.Types.ObjectId | null,
+
+    comment: string |  null,
+
+    message: string | null
+}
