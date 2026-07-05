@@ -1,7 +1,8 @@
 import express from 'express';
 import { 
     deleteConversation, getConversationChats, getConversations, getConversationById, sendMessage, 
-    deleteChat
+    deleteChat,
+    markAsRead
 } from '../controllers/conversationController.ts';
 import { auth } from '../middlewares/authMiddleware.ts';
 
@@ -11,9 +12,10 @@ router.route('/')
     .post(auth, sendMessage)
     .get(auth, getConversations)
 
-router.delete('/chats/:chatId/delete', deleteChat);
+router.delete('/chats/:chatId/delete', auth, deleteChat);
 
-router.get('/:conversationId/chats', getConversationChats);
+router.get('/:conversationId/chats/mark-as-read', auth, markAsRead);
+router.get('/:conversationId/chats', auth, getConversationChats);
 
 router.route('/:conversationId')
     .get(auth, getConversationById)
