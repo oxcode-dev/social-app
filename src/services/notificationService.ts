@@ -25,19 +25,12 @@ export const createNotification = async({
     }
 
     const notification = await Notification.create({
-
         recipient,
-
         sender,
-
         type,
-
         post,
-
         comment,
-
         message
-
     });
 
     const populated = await Notification.findById(notification._id)
