@@ -19,6 +19,8 @@ const routes = (app: express.Application) => {
     app.use('/api/followings', followingsRouter)
 
     app.get('/api/test', async (req, res) => {
+        console.log(req.app);
+        // console.log(req.app.get("io"));
         res.status(200).json({ message: 'Testing API routes' })
 
         // const posts = await Post.find({
