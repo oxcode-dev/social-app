@@ -41,6 +41,7 @@ export const addComments = async (req: express.Request | any, res: express.Respo
         sender: auth.id, 
         type: "COMMENT",
         post: post.id,
+        message: `${auth.username} commented on your post.`
     });
 
     return res.status(200).json({
