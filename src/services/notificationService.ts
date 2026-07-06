@@ -38,8 +38,6 @@ export const createNotification = async({
     const populated = await Notification.findById(notification._id)
         .populate("sender","username profilePic");
 
-    // console.log(populated)
-
     // io.to(recipient.toString())
     //     .emit("notification", populated);
 

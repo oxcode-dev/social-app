@@ -21,23 +21,23 @@ const routes = (app: express.Application) => {
 
     app.get('/api/test', async (req, res) => {
         // console.log(req.app);
-        console.log(req.app.get("io"));
-        const post = await Post.findOne({
-            'postedBy': '699f80cf00d4b770db122aa5'
-        })
+        // console.log(req.app.get("io"));
+        // const post = await Post.findOne({
+        //     'postedBy': '699f80cf00d4b770db122aa5'
+        // })
 
-        await createNotification({
+        // await createNotification({
 
-            io: req.app.get("io"),
+        //     io: req.app.get("io"),
 
-            recipient: post?.postedBy,
+        //     recipient: post?.postedBy || '',
 
-            sender: '699f80cf00d4b770db122aa5',
+        //     sender: '699f80cf00d4b770db122aa5',
 
-            type: "COMMENT",
+        //     type: "COMMENT",
 
-            post: post.id,
-        });
+        //     post: post.id,
+        // });
         res.status(200).json({ message: 'Testing API routes' })
 
         // const posts = await Post.find({

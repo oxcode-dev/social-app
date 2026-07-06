@@ -54,10 +54,6 @@ export interface IPost {
     postedBy: string | mongoose.Schema.Types.ObjectId;
     likes: string[]; // | mongoose.Schema.Types.ObjectId[];
     commentsCount: number;
-    // comments: {
-    //     user: string | mongoose.Schema.Types.ObjectId;
-    //     comment: string;
-    // }[];
     savedBy: string[]; // | mongoose.Schema.Types.ObjectId[];
     createdAt: Date;
 }
