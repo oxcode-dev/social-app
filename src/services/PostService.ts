@@ -54,13 +54,6 @@ export const fetchPost = async (id: string) => {
         .populate("postedBy", "username id first_name last_name")
         .populate("likes", "username id first_name last_name")
         .populate("savedBy", "username id first_name last_name");
-        // .populate({
-        //     path: "comments",
-        //     populate: {
-        //         path: "user",
-        //         select: "username id first_name last_name",
-        //     }
-        // });
 }
 
 export const editPost = async (id: string, data: Pick<IPost, 'caption' | 'image' | 'postedBy'>) => {

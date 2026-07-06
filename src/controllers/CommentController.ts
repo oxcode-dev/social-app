@@ -8,6 +8,7 @@ import {
 } from '../services/commentRepository.ts';
 
 import { type PaginationType } from '../types/index.ts';
+import { createNotification } from '../services/notificationService.ts';
 
 export const addComments = async (req: express.Request | any, res: express.Response) => {
     const postId = req.params.id as string;
@@ -31,6 +32,15 @@ export const addComments = async (req: express.Request | any, res: express.Respo
         user: auth.id, 
         text,
         parentCommentId: null
+    });
+
+    await createNotification({
+        io: req.app.get("io"),
+        //@ts-ignore
+        recipient: post?.postedBy,
+        sender: auth.id, 
+        type: "COMMENT",
+        post: post.id,
     });
 
     return res.status(200).json({

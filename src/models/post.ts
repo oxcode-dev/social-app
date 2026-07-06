@@ -12,6 +12,7 @@ const postSchema = new Schema<IPost>({
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "social_user",
+        required: true,
     },
     likes: [
         {

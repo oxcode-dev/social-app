@@ -58,19 +58,23 @@ export interface IPost {
     createdAt: Date;
 }
 
-export interface NotificationType {
-
-    io: any
-
+export interface INotification {
     recipient: string //| mongoose.Schema.Types.ObjectId,
-
     sender: string //| mongoose.Schema.Types.ObjectId,
-
-    type: string,
-
+    type: string
     post: string | null //| mongoose.Schema.Types.ObjectId | null,
+    comment: string |  null
+    chat: string | null
+    message: string | null
+}
 
+export interface NotificationType {
+    io: any
+    recipient: string 
+    sender: string 
+    type: string,
+    post: string | null
     comment: string |  null,
-
+    chat: string | null
     message: string | null
 }

@@ -9,18 +9,9 @@ export const createNotification = async({
     type,
     post = null,
     comment = null,
+    chat = null,
     message = null
 }: NotificationType) =>{
-
-    // console.log({
-    //     io,
-    //     recipient,
-    //     sender,
-    //     type,
-    //     post,
-    //     comment,
-    //     message
-    // })
 
     if(recipient === sender){
         return;
@@ -32,7 +23,8 @@ export const createNotification = async({
         type,
         post,
         comment,
-        message
+        chat,
+        message,
     });
 
     const populated = await Notification.findById(notification._id)

@@ -20,7 +20,7 @@ const notificationSchema = new mongoose.Schema({
             "LIKE",
             "COMMENT",
             "COMMENT_REPLY",
-            "MESSAGE",
+            "CHAT",
             "MENTION"
         ],
         required: true
@@ -36,9 +36,14 @@ const notificationSchema = new mongoose.Schema({
         ref: "Comment"
     },
 
-    message: {
+    chat: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message"
+    },
+
+    message: {
+        type: String,
+        required: false
     },
 
     isRead: {
@@ -54,5 +59,8 @@ notificationSchema.index({
     recipient:1,
     createdAt:-1
 });
+
+notificationSchema.set('toObject', { virtuals: true });
+notificationSchema.set('toJSON', { virtuals: true });
 
 export const Notification = mongoose.model('social_notifications', notificationSchema);
