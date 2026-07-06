@@ -8,6 +8,7 @@ import { conversationRouter } from './conversationRoute.ts';
 import { userRouter } from './userRoute.ts';
 import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
+import { createNotification } from '../services/notificationService.ts';
 
 const routes = (app: express.Application) => {
     app.use('/api/auth', authRouter)
@@ -21,6 +22,22 @@ const routes = (app: express.Application) => {
     app.get('/api/test', async (req, res) => {
         console.log(req.app);
         // console.log(req.app.get("io"));
+        const post = await Post.findOne({
+            'postedBy': '699f80cf00d4b770db122aa5'
+        })
+
+        await createNotification({
+
+            io: req.app.get("io"),
+
+            recipient: post?.postedBy,
+
+            sender: '699f80cf00d4b770db122aa5',
+
+            type: "COMMENT",
+
+            post: post.id,
+        });
         res.status(200).json({ message: 'Testing API routes' })
 
         // const posts = await Post.find({

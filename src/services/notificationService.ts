@@ -1,9 +1,9 @@
 import { Notification } from "../models/notification.ts";
-import { NotificationType } from "../types/index.ts";
+import { type NotificationType } from "../types/index.ts";
 
 
 export const createNotification = async({
-    io,
+    io=true,
     recipient,
     sender,
     type,
@@ -12,7 +12,17 @@ export const createNotification = async({
     message = null
 }: NotificationType) =>{
 
-    if(recipient.toString()===sender.toString()){
+    console.log({
+        io,
+        recipient,
+        sender,
+        type,
+        post,
+        comment,
+        message
+    })
+
+    if(recipient === sender){
         return;
     }
 
@@ -28,7 +38,9 @@ export const createNotification = async({
     const populated = await Notification.findById(notification._id)
         .populate("sender","username profilePic");
 
-    io.to(recipient.toString())
-        .emit("notification", populated);
+    console.log(populated)
+
+    // io.to(recipient.toString())
+    //     .emit("notification", populated);
 
 };
