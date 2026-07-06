@@ -3,21 +3,13 @@ import { NotificationType } from "../types/index.ts";
 
 
 export const createNotification = async({
-
     io,
-
     recipient,
-
     sender,
-
     type,
-
-    post=null,
-
-    comment=null,
-
-    message=null
-
+    post = null,
+    comment = null,
+    message = null
 }: NotificationType) =>{
 
     if(recipient.toString()===sender.toString()){
