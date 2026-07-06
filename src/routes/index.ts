@@ -20,8 +20,8 @@ const routes = (app: express.Application) => {
     app.use('/api/followings', followingsRouter)
 
     app.get('/api/test', async (req, res) => {
-        console.log(req.app);
-        // console.log(req.app.get("io"));
+        // console.log(req.app);
+        console.log(req.app.get("io"));
         const post = await Post.findOne({
             'postedBy': '699f80cf00d4b770db122aa5'
         })

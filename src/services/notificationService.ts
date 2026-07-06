@@ -12,15 +12,15 @@ export const createNotification = async({
     message = null
 }: NotificationType) =>{
 
-    console.log({
-        io,
-        recipient,
-        sender,
-        type,
-        post,
-        comment,
-        message
-    })
+    // console.log({
+    //     io,
+    //     recipient,
+    //     sender,
+    //     type,
+    //     post,
+    //     comment,
+    //     message
+    // })
 
     if(recipient === sender){
         return;
@@ -38,7 +38,7 @@ export const createNotification = async({
     const populated = await Notification.findById(notification._id)
         .populate("sender","username profilePic");
 
-    console.log(populated)
+    // console.log(populated)
 
     // io.to(recipient.toString())
     //     .emit("notification", populated);
