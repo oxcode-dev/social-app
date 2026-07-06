@@ -91,6 +91,17 @@ export const likeUnlikePostSystem = async (postId: string, userId: string) => {
     } else {
         post.likes.push(userId)
         await post.save();
+
+        // await createNotification({
+        //     io: req.app.get("io"),
+        //     //@ts-ignore
+        //     recipient: post?.postedBy,
+        //     sender: auth.id, 
+        //     type: "COMMENT",
+        //     post: post.id,
+        //     message: `${auth.username} commented on your post.`
+        // });
+
         response.message = "Post Liked successfully"
     }
 
