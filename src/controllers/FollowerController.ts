@@ -1,6 +1,7 @@
 import express from 'express';
 import { fetchUserAndFollowingsById, fetchUserByIdAndFollowerId, followUserSystem, unfollowUserSystem } from "../services/userServices.ts";
 import { type RequestWithUser } from '../types/index.ts';
+import { createNotification } from '../services/notificationService.ts';
 
 export const followUser = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user;
@@ -13,6 +14,17 @@ export const followUser = async (req: RequestWithUser, res: express.Response) =>
     }
 
     await followUserSystem(userIdToFollow, auth?.id);
+
+    await createNotification({
+        io: true, //req.app.get("io"),
+        recipient: userIdToFollow,
+        sender: auth?._id, 
+        type: "FOLLOW",
+        post: null,
+        comment: null,
+        chat: null,
+        message: `${auth?.username} started following you.`
+    });
 
     res.json({ 
         status: 'success',

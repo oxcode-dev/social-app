@@ -39,7 +39,7 @@ export interface DataStoredInToken {
 }
 
 export interface RequestWithUser extends express.Request {
-    user: Pick<AuthUserType, 'id' | 'email' | '_id'>
+    user: Pick<AuthUserType, 'id' | 'email' | '_id' | 'username'>
 }
 
 export type PaginationType = {
