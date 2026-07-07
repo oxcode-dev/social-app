@@ -1,5 +1,5 @@
 import express from 'express';
-import { type PaginationType, RequestWithUser } from '../types/index.ts';
+import { type PaginationType, type RequestWithUser } from '../types/index.ts';
 import { 
     countNotifications, deleteNotificationById, fetchNotificationPagination,
     markRead,

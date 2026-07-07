@@ -9,6 +9,7 @@ import { userRouter } from './userRoute.ts';
 import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
+import { notificationRouter } from './notificationRoute.ts';
 
 const routes = (app: express.Application) => {
     app.use('/api/auth', authRouter)
@@ -18,6 +19,7 @@ const routes = (app: express.Application) => {
     app.use('/api/conversations', conversationRouter)
     app.use('/api/users', userRouter)
     app.use('/api/followings', followingsRouter)
+    app.use('/api/notifications', notificationRouter)
 
     app.get('/api/test', async (req, res) => {
         // console.log(req.app);
