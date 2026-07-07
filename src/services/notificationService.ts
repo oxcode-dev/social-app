@@ -35,7 +35,11 @@ export const createNotification = async({
 
 };
 
-export const fetchNotifications = async (userId: string, skip: number, limit: number) => {
+export const countNotifications = async (userId: string) => {
+    return await Notification.countDocuments({recipient: userId });
+}
+
+export const fetchNotificationPagination = async (userId: string, skip: number, limit: number) => {
     return await Notification.find({ 
             recipient: userId
         })

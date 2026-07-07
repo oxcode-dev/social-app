@@ -1,18 +1,19 @@
 import express from 'express';
 import { type PaginationType, RequestWithUser } from '../types/index.ts';
+import { countNotifications, fetchNotificationPagination } from '../services/notificationService.ts';
 
-export const getFeedPosts = async (req: express.Request | PaginationType | RequestWithUser, res: express.Response) => {
+export const getAllUserNotifications = async (req: RequestWithUser & PaginationType, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
 
-    const user =  req.user as RequestWithUser;
+    const user =  req.user;
 
-    const totalCount = 0//await countFeedPosts(feedUsers);
-    const posts = 0 // fetchFeedPosts(feedUsers, skip, limit);
+    const totalCount = await countNotifications(user?._id);
+    const notifications = await fetchNotificationPagination(user?.id, skip, limit);
 
     let data = {
-        posts: posts, 
+        notifications: notifications, 
         status: "success",
-        message: "Posts retrieved successfully",
+        message: "Notifications retrieved successfully",
         metadata: {
             page: page,
             perPage: limit,
