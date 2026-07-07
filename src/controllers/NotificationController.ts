@@ -1,6 +1,8 @@
 import express from 'express';
 import { type PaginationType, RequestWithUser } from '../types/index.ts';
-import { countNotifications, fetchNotificationPagination } from '../services/notificationService.ts';
+import { 
+    countNotifications, fetchNotificationPagination
+} from '../services/notificationService.ts';
 
 export const getAllUserNotifications = async (req: RequestWithUser & PaginationType, res: express.Response) => {
     const { page, limit, skip } = req as PaginationType;
