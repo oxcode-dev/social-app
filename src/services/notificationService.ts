@@ -34,3 +34,50 @@ export const createNotification = async({
     //     .emit("notification", populated);
 
 };
+
+export const fetchNotifications = async (userId: string, skip: number, limit: number) => {
+    return await Notification.find({ 
+            recipient: userId
+        })
+        .populate("sender", "username id first_name last_name")
+        .populate("post")
+        .populate("chat")
+        .populate("comment")
+        .sort({ createdAt: -1})
+        .skip(skip)
+        .limit(limit)
+}
+
+export const markRead = async(notificationId: string)=>{
+
+    await Notification.findByIdAndUpdate(
+        notificationId,
+        {
+            isRead:true
+        }
+
+    );
+};
+
+export const readAll = async(userId: string)=>{
+    await Notification.updateMany(
+        {
+            recipient:userId,
+            isRead:false
+        },
+        {
+            isRead:true
+        }
+    );
+};
+
+export const deleteNotification = async(notificationId: string, userId: string)=>{
+
+    await Notification.findOneAndDelete({
+
+        _id: notificationId,
+
+        recipient: userId
+
+    });
+};
