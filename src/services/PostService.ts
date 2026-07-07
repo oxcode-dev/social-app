@@ -1,6 +1,7 @@
 import { Post } from "../models/post.ts"
 import { User } from "../models/user.ts"
 import { type IPost } from "../types/index.ts"
+import { createNotification } from "./notificationService.ts"
 
 export const storePost = async (data: Pick<IPost, 'caption' | 'image' | 'postedBy'>) => {
     return await Post.create(data)
@@ -92,15 +93,15 @@ export const likeUnlikePostSystem = async (postId: string, userId: string) => {
         post.likes.push(userId)
         await post.save();
 
-        // await createNotification({
-        //     io: req.app.get("io"),
-        //     //@ts-ignore
-        //     recipient: post?.postedBy,
-        //     sender: auth.id, 
-        //     type: "COMMENT",
-        //     post: post.id,
-        //     message: `${auth.username} commented on your post.`
-        // });
+        await createNotification({
+            io: true, //req.app.get("io"),
+            //@ts-ignore
+            recipient: post?.postedBy,
+            sender: userId, 
+            type: "LIKE",
+            post: post.id,
+            // message: `${username} liked on your post.`
+        });
 
         response.message = "Post Liked successfully"
     }
