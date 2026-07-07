@@ -4,6 +4,7 @@ import {
     deleteChatById,
     markConversationChatsAsRead
 } from "../services/conversationService.ts";
+import { createNotification } from "../services/notificationService.ts";
 
 export const sendMessage = async (req: any, res: express.Response) => {
     const auth = req?.user;
@@ -11,7 +12,19 @@ export const sendMessage = async (req: any, res: express.Response) => {
 
     if (!recipient || (!text.trim())) return;
 
-    await storeMessage(auth.id, recipient, text);
+    const chat = await storeMessage(auth.id, recipient, text);
+
+    await createNotification({
+        io: req.app.get("io"),
+        //@ts-ignore
+        recipient: recipient,
+        sender: auth.id, 
+        type: "CHAT",
+        post: null,
+        chat: chat._id,
+        comment: null,
+        message: `${auth.username} sent you a chat.`
+    });
 
     res.status(201).json({ msg: "Created." });
 }

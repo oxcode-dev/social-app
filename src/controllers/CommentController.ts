@@ -162,6 +162,7 @@ export const replyToComment = async (req: express.Request | any, res: express.Re
         sender: auth.id, 
         type: "COMMENT_REPLY",
         post: null,
+        comment: commentId,
         message: `${auth.username} replied to your comment.`
     });
 

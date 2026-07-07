@@ -25,6 +25,8 @@ export const storeMessage = async (userId: string, recipientId: string, text: st
     });
 
     await chat.save();
+
+    return chat;
 }
 
 export const fetchAllConversations = async (userId: string) => {
