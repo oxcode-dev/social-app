@@ -155,6 +155,16 @@ export const replyToComment = async (req: express.Request | any, res: express.Re
         parentCommentId: commentId
     });
 
+    await createNotification({
+        io: req.app.get("io"),
+        //@ts-ignore
+        recipient: comment?.user,
+        sender: auth.id, 
+        type: "COMMENT_REPLY",
+        post: null,
+        message: `${auth.username} replied to your comment.`
+    });
+
     return res.status(200).json({
         success: true,
         message: "Comment Added"

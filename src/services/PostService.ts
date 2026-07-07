@@ -83,7 +83,6 @@ export const likeUnlikePostSystem = async (postId: string, userId: string) => {
         return response;
     }
 
-
     if (post.likes.includes(userId)) {
         const index = post.likes.indexOf(userId);
         post.likes.splice(index, 1);
