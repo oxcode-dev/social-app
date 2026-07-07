@@ -63,7 +63,7 @@ export const markRead = async(notificationId: string)=>{
     );
 };
 
-export const readAll = async(userId: string)=>{
+export const readAllNotifications = async(userId: string)=>{
     await Notification.updateMany(
         {
             recipient:userId,
@@ -75,7 +75,7 @@ export const readAll = async(userId: string)=>{
     );
 };
 
-export const deleteNotification = async(notificationId: string, userId: string)=>{
+export const deleteNotificationById = async(notificationId: string, userId: string)=>{
 
     await Notification.findOneAndDelete({
 

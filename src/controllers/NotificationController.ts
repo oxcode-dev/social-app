@@ -1,7 +1,9 @@
 import express from 'express';
 import { type PaginationType, RequestWithUser } from '../types/index.ts';
 import { 
-    countNotifications, fetchNotificationPagination
+    countNotifications, deleteNotificationById, fetchNotificationPagination,
+    markRead,
+    readAllNotifications
 } from '../services/notificationService.ts';
 
 export const getAllUserNotifications = async (req: RequestWithUser & PaginationType, res: express.Response) => {
@@ -26,3 +28,38 @@ export const getAllUserNotifications = async (req: RequestWithUser & PaginationT
 
     res.status(200).json(data);
 }
+
+export const markNotificationRead = async (req: RequestWithUser, res: express.Response) => {
+    const { notificationId } = req.params as { notificationId: string};
+
+    await markRead(notificationId);
+
+    res.status(200).json({
+        status: "success",
+        message: "Notification marked as read successfully"
+    });
+}
+
+export const markAllNotificationsRead = async (req: RequestWithUser, res: express.Response) => {
+    const user = req.user;
+
+    await readAllNotifications(user?._id);
+
+    res.status(200).json({
+        status: "success",
+        message: "All notifications marked as read successfully"
+    });
+}
+
+export const deleteNotification = async (req: RequestWithUser, res: express.Response) => {
+    const user = req.user;
+
+    const { notificationId } = req.params as { notificationId: string};
+
+    await deleteNotificationById(notificationId, user?._id);
+
+    res.status(200).json({
+        status: "success",
+        message: "Notification deleted successfully"
+    });
+}   
