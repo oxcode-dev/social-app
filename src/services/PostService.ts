@@ -160,3 +160,8 @@ export const updatePostCommentsCount = async (postId: string) => {
     );
 
 }
+
+
+export const deletePostsByUserId = async (userId: string) => {
+    await Post.deleteMany({ postedBy: userId });
+}
