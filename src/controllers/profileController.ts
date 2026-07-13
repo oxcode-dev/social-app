@@ -96,10 +96,6 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
 
     await deletePostsByUserId(user?.id || '');
 
-    const followers = user?.followers || [];
-    const following = user?.followings || [];
-
-    // await unfollowUserSystem(userIdToUnfollow, auth?.id);
     const userId = user?.id;
 
     // delete post & user images ⚠️⚠️
@@ -109,27 +105,6 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
         expires: new Date(Date.now()),
         httpOnly: true,
     });
-
-    // for (let i = 0; i < posts.length; i++) {
-    //     const post = await Post.findById(posts[i]);
-    //     await post.deleteOne();
-    // }
-
-    // for (let i = 0; i < followers.length; i++) {
-    //     const follower = await User.findById(followers[i]);
-
-    //     const index = follower?.following.indexOf(userId);
-    //     follower?.following.splice(index, 1);
-    //     await follower.save();
-    // }
-
-    // for (let i = 0; i < following.length; i++) {
-    //     const follows = await User.findById(following[i]);
-
-    //     const index = follows?.followers.indexOf(userId);
-    //     follows.followers.splice(index, 1);
-    //     await follows.save();
-    // }
 
     res.status(200).json({
         success: true,
