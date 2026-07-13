@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
 import { fetchUserById, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
+import { deletePostsByUserId } from '../services/PostService.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
@@ -92,9 +93,13 @@ export const changePassword = async (req: RequestWithUser, res: express.Response
 export const deleteProfile = async (req: RequestWithUser, res: express.Response) => {
 
     const user = await User.findById(req.user?.id);
-    const posts = user?.posts || [];
+
+    await deletePostsByUserId(user?.id || '');
+
     const followers = user?.followers || [];
     const following = user?.followings || [];
+
+    // await unfollowUserSystem(userIdToUnfollow, auth?.id);
     const userId = user?.id;
 
     // delete post & user images ⚠️⚠️
