@@ -92,14 +92,83 @@ export const changePassword = async (req: RequestWithUser, res: express.Response
 
 export const deleteProfile = async (req: RequestWithUser, res: express.Response) => {
 
-    const user = await User.findById(req.user?.id);
+    const userId = req.user.id;
+    const { password } = req.body;
 
+    // Get current user
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found"
+        });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+        return res.status(400).json({
+            success: false,
+            message: "Incorrect password"
+        });
+    }
+
+    // Delete user's posts
     await deletePostsByUserId(user?.id || '');
 
-    const userId = user?.id;
 
-    // delete post & user images ⚠️⚠️
-    const result = await User.findByIdAndDelete(userId);
+    // Delete user's comments
+    // await Comment.deleteMany({
+    //     user: userId
+    // });
+
+    // // Delete user's notifications
+    // await Notification.deleteMany({
+    //     $or: [
+    //         { sender: userId },
+    //         { recipient: userId }
+    //     ]
+    // });
+
+    // // Delete user's messages
+    // await Message.deleteMany({
+    //     sender: userId
+    // });
+
+    // // Delete conversations involving the user
+    // await Conversation.deleteMany({
+    //     participants: userId
+    // });
+
+    // Remove user from followers
+    await User.updateMany(
+        {
+            followers: userId
+        },
+        {
+            $pull: {
+                followers: userId
+            }
+        }
+    );
+
+    // Remove user from following
+    await User.updateMany(
+        {
+            following: userId
+        },
+        {
+            $pull: {
+                following: userId
+            }
+        }
+    );
+
+    // Delete user
+    await User.findByIdAndDelete(userId);
+
 
     res.cookie('token', '', {
         expires: new Date(Date.now()),
@@ -108,6 +177,7 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
 
     res.status(200).json({
         success: true,
-        message: "Profile Deleted"
+        message: "Account deleted successfully"
     });
+
 };
