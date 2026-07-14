@@ -1,6 +1,5 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
 import { deleteUserById, fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
