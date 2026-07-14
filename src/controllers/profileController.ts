@@ -2,10 +2,11 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
-import { fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
+import { deleteUserById, fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
 import { deleteCommentsByUserId } from '../services/commentRepository.ts';
 import { deleteNotificationsByUserId } from '../services/notificationService.ts';
+import { deleteChatsByUserId } from '../services/conversationService.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
@@ -117,30 +118,24 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
         });
     }
 
-    // Delete user's posts
-    await deletePostsByUserId(user.id);
+    await Promise.all([
+        // Delete user's posts
+        deletePostsByUserId(user.id),
 
+        // Delete user's comments
+        deleteCommentsByUserId(user.id),
 
-    // Delete user's comments
-    await deleteCommentsByUserId(user.id)
+        // Delete user's notifications
+        deleteNotificationsByUserId(user.id),
 
-    // Delete user's notifications
-    await deleteNotificationsByUserId(user.id)
+        // Delete user's chats and conversations
+        deleteChatsByUserId(user.id),
 
-    // // Delete user's messages
-    // await Message.deleteMany({
-    //     sender: userId
-    // });
+        unfollowUserSystemByDeletedUser(userId),
 
-    // // Delete conversations involving the user
-    // await Conversation.deleteMany({
-    //     participants: userId
-    // });
-
-    await unfollowUserSystemByDeletedUser(userId)
-
-    // Delete user
-    await User.findByIdAndDelete(userId);
+        // Delete user
+        deleteUserById(userId)
+    ]);
 
 
     res.cookie('token', '', {
