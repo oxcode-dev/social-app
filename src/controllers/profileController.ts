@@ -5,6 +5,7 @@ import { type RequestWithUser } from '../types/index.ts';
 import { fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
 import { deleteCommentsByUserId } from '../services/commentRepository.ts';
+import { deleteNotificationsByUserId } from '../services/notificationService.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
@@ -123,13 +124,8 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
     // Delete user's comments
     await deleteCommentsByUserId(user.id)
 
-    // // Delete user's notifications
-    // await Notification.deleteMany({
-    //     $or: [
-    //         { sender: userId },
-    //         { recipient: userId }
-    //     ]
-    // });
+    // Delete user's notifications
+    await deleteNotificationsByUserId(user.id)
 
     // // Delete user's messages
     // await Message.deleteMany({
