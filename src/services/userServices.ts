@@ -85,3 +85,30 @@ export const fetchUserAndFollowingsById = async (userId: string) => {
         })
 }
 
+export const unfollowUserSystemByDeletedUser = async (userId: string) => {
+    // Remove user from followers
+    await Promise.all([
+        User.updateMany(
+            {
+                followers: userId
+            },
+            {
+                $pull: {
+                    followers: userId
+                }
+            }
+        ),
+
+        // Remove user from following
+        User.updateMany(
+            {
+                following: userId
+            },
+            {
+                $pull: {
+                    following: userId
+                }
+            }
+        )
+    ]);
+}

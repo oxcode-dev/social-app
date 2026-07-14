@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
-import { fetchUserById, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
+import { fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
@@ -96,7 +96,7 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
     const { password } = req.body;
 
     // Get current user
-    const user = await User.findById(userId);
+    const user = await fetchUserById(userId);
 
     if (!user) {
         return res.status(404).json({
@@ -142,29 +142,7 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
     //     participants: userId
     // });
 
-    // Remove user from followers
-    await User.updateMany(
-        {
-            followers: userId
-        },
-        {
-            $pull: {
-                followers: userId
-            }
-        }
-    );
-
-    // Remove user from following
-    await User.updateMany(
-        {
-            following: userId
-        },
-        {
-            $pull: {
-                following: userId
-            }
-        }
-    );
+    await unfollowUserSystemByDeletedUser(userId)
 
     // Delete user
     await User.findByIdAndDelete(userId);
