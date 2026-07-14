@@ -91,3 +91,18 @@ export const markConversationChatsAsRead = async (conversationId: string, userId
         }
     );
 }
+
+export const deleteChatsByUserId = async (userId: string) => {
+    await Promise.all([
+        // Delete user's chat
+        Chat.deleteMany({
+            sender: userId
+        }),
+
+        // Delete conversations involving the user
+        await Conversation.deleteMany({
+            participants: userId
+        })
+    ])
+   
+}
