@@ -1,7 +1,9 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { type RequestWithUser } from '../types/index.ts';
-import { deleteUserById, fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
+import { 
+    deleteUserById, fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword
+} from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
 import { deleteCommentsByUserId } from '../services/commentRepository.ts';
 import { deleteNotificationsByUserId } from '../services/notificationService.ts';
