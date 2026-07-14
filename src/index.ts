@@ -8,6 +8,7 @@ import rateLimiter from 'express-rate-limit';
 import { Server } from 'socket.io';
 import http from "http";
 import helmet from "helmet";
+import morgan from "morgan";
 
 const app: Application = express();
 
@@ -15,6 +16,9 @@ app.use(express.json());
 
 // Use Helmet early in your middleware stack
 app.use(helmet());
+
+// Use 'dev' format for concise, color-coded console logs
+app.use(morgan('dev')); 
 
 // const server = createServer(app);
 const server = http.createServer(app);
