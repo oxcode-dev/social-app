@@ -85,3 +85,12 @@ export const deleteNotificationById = async(notificationId: string, userId: stri
 
     });
 };
+
+export const deleteNotificationsByUserId = async(userId: string) => {
+    await Notification.deleteMany({
+        $or: [
+            { sender: userId },
+            { recipient: userId }
+        ]
+    });
+}
