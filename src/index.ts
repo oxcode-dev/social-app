@@ -7,10 +7,14 @@ import routes from "./routes/index.ts";
 import rateLimiter from 'express-rate-limit';
 import { Server } from 'socket.io';
 import http from "http";
+import helmet from "helmet";
 
 const app: Application = express();
 
 app.use(express.json());
+
+// Use Helmet early in your middleware stack
+app.use(helmet());
 
 // const server = createServer(app);
 const server = http.createServer(app);
