@@ -90,3 +90,9 @@ export const fetchCommentReplies = async (commentId: string, skip: number, limit
         .skip(skip)
         .limit(limit)
 }       
+
+export const deleteCommentsByUserId = async (userId: string) => {
+    await Comment.deleteMany({
+        user: userId
+    });
+}

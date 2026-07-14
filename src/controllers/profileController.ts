@@ -4,6 +4,7 @@ import { User } from '../models/user.ts';
 import { type RequestWithUser } from '../types/index.ts';
 import { fetchUserById, unfollowUserSystemByDeletedUser, updateUserDetails, updateUserPassword } from '../services/userServices.ts';
 import { deletePostsByUserId } from '../services/PostService.ts';
+import { deleteCommentsByUserId } from '../services/commentRepository.ts';
 
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
@@ -116,13 +117,11 @@ export const deleteProfile = async (req: RequestWithUser, res: express.Response)
     }
 
     // Delete user's posts
-    await deletePostsByUserId(user?.id || '');
+    await deletePostsByUserId(user.id);
 
 
     // Delete user's comments
-    // await Comment.deleteMany({
-    //     user: userId
-    // });
+    await deleteCommentsByUserId(user.id)
 
     // // Delete user's notifications
     // await Notification.deleteMany({
