@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import http from "http";
 import helmet from "helmet";
 import morgan from "morgan";
+import cors from "cors"
 
 const app: Application = express();
 
@@ -25,6 +26,14 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
+const corsOptions = {
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+    origin: (process.env.CLIENT_URL || 'http://localhost:3000').split(','),
+};
+
+app.use(cors(corsOptions));
 
 app.use(rateLimiter({
   windowMs: 1 * 60 * 1000, // 1 minutes
