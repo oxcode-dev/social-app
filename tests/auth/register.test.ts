@@ -44,9 +44,7 @@ describe("Register", () => {
 
         const user = await User.findOne({
             email: payload.email
-        });
-
-        console.log("User found:", user)
+        }).select("+password");
 
         expect(user).not.toBeNull();
 

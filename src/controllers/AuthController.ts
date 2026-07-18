@@ -37,6 +37,7 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 
     return res.status(201).json({
         token, 
+        success: true,
         message: 'User registered successfully', 
         user: { 
             id: savedUser._id,
