@@ -22,6 +22,7 @@ export const addComments = async (req: express.Request | any, res: express.Respo
     if(!post) {
         return res.status(404).json({
             status: "error",
+            success: false,
             message: "Post not found!",
         })
     }
