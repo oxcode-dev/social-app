@@ -67,6 +67,8 @@ app.listen(PORT, () => {
 
 connectDB();
 
+export default app;
+
 // io.on("connection", (socket) => {
 //   console.log("A user has connected");
 
