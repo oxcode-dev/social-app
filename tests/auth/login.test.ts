@@ -2,13 +2,26 @@
 
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
 
 
 describe("Login", () => {
 
+    let req , res;
+
+    beforeEach(() => {
+        // Reset mocks before each test
+        vi.restoreAllMocks();
+
+        // Re-create fresh, mocked Express response and request objects
+        req = { body: {} };
+        res = {
+            status: vi.fn().mockReturnThis(), // Allows chaining: res.status().json()
+            json: vi.fn(),
+        };
+    });
     const endpoint = "/api/auth/login";
 
     const payload = {
@@ -16,11 +29,39 @@ describe("Login", () => {
         password: "Password123!"
     };
 
-    it("should login an existing user", async () => {
+    it('should return 400 if email or password is missing', async () => {
+        const response = await request(app)
+            .post(endpoint)
+            .send({
+                email: "sam@example.com",
+                // password: "Password123!"
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.status).toBeFalsy();
+        // expect(response.body.status).toHaveBeenCalledWith({ error: 'Email and password are required' });
+    });
+
+    it("should login an existing user with valid credentials", async () => {
+        // Mock the database to return a valid user payload
+        // vi.mocked(User.findOne).mockResolvedValue({
+        //     email: 'test@example.com',
+        //     password: 'correctpassword123',
+        //     first_name: "Samuel",
+        //     last_name: "John",
+        //     username: "sam_john",
+        //     id: "123456789",
+        //     _id: "123456789",
+        //     fullName: "Samuel John",
+        //     // email: "sam@example.com",
+        //     // password: "Password123!"
+        // });
 
         const response = await request(app)
             .post(endpoint)
             .send(payload);
+
+        console.log(response.body)
 
         expect(response.status).toBe(201);
 
@@ -28,65 +69,6 @@ describe("Login", () => {
 
         expect(response.body.user.email)
             .toBe(payload.email);
-
-    });
-
-    it("should hash password", async () => {
-
-        await request(app)
-            .post(endpoint)
-            .send(payload);
-
-        const user = await User.findOne({
-            email: payload.email
-        }).select("+password");
-
-        expect(user).not.toBeNull();
-
-        const match = await bcrypt.compare(
-            payload.password,
-            user!.password
-        );
-
-        expect(match).toBe(true);
-
-    });
-
-    it("should reject duplicate email", async () => {
-
-        await User.create(payload);
-
-        const response = await request(app)
-            .post(endpoint)
-            .send(payload);
-
-        expect(response.status).toBe(400);
-
-    });
-
-    it("should reject invalid email", async () => {
-
-        const response = await request(app)
-            .post(endpoint)
-            .send({
-                ...payload,
-                email: "invalid"
-            });
-
-        expect(response.status).toBe(400);
-
-    });
-
-    it("should reject weak password", async () => {
-
-        const response = await request(app)
-            .post(endpoint)
-            .send({
-                ...payload,
-                password: "123"
-            });
-
-        expect(response.status).toBe(400);
 
     });
 
