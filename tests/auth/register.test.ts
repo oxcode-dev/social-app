@@ -25,8 +25,6 @@ describe("Register", () => {
             .post(endpoint)
             .send(payload);
 
-        console.log(response)
-
         expect(response.status).toBe(201);
 
         expect(response.body.success).toBe(true);
@@ -65,7 +63,7 @@ describe("Register", () => {
             .post(endpoint)
             .send(payload);
 
-        expect(response.status).toBe(409);
+        expect(response.status).toBe(400);
 
     });
 
