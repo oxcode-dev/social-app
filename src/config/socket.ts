@@ -23,6 +23,8 @@ export class ServerSocket {
         });
 
         this.io.on('connect', this.StartListeners);
+
+        console.info('Socket server started');
     }
 
     StartListeners = (socket: Socket) => {
@@ -72,6 +74,23 @@ export class ServerSocket {
 
                 this.SendMessage('user_disconnected', users, socket.id);
             }
+        });
+
+        socket.on("join", (userId) => {
+            socket.join(userId);
+            // onlineUsers.set(userId, socket.id);
+        });
+
+        socket.on("send-message", ({ receiverId, message }) => {
+            this.io.to(receiverId).emit("new-message", message);
+        });
+
+        socket.on("typing", ({ receiverId }) => {
+            this.io.to(receiverId).emit("typing");
+        });
+
+        socket.on("stop-typing", ({ receiverId }) => {
+            this.io.to(receiverId).emit("stop-typing");
         });
     };
 
