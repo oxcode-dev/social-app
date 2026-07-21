@@ -44,18 +44,18 @@ describe("Login", () => {
 
     it("should login an existing user with valid credentials", async () => {
         // Mock the database to return a valid user payload
-        // vi.mocked(User.findOne).mockResolvedValue({
-        //     email: 'test@example.com',
-        //     password: 'correctpassword123',
-        //     first_name: "Samuel",
-        //     last_name: "John",
-        //     username: "sam_john",
-        //     id: "123456789",
-        //     _id: "123456789",
-        //     fullName: "Samuel John",
-        //     // email: "sam@example.com",
-        //     // password: "Password123!"
-        // });
+        User.findOne.mockResolvedValue({
+            email: 'test@example.com',
+            password: 'correctpassword123',
+            first_name: "Samuel",
+            last_name: "John",
+            username: "sam_john",
+            id: "123456789",
+            _id: "123456789",
+            fullName: "Samuel John",
+            // email: "sam@example.com",
+            // password: "Password123!"
+        });
 
         const response = await request(app)
             .post(endpoint)
