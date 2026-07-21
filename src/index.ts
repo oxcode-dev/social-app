@@ -5,11 +5,11 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import routes from "./routes/index.ts";
 import rateLimiter from 'express-rate-limit';
-import { Server } from 'socket.io';
 import http from "http";
 import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors"
+import { ServerSocket } from "./config/socket.ts";
 
 const app: Application = express();
 
@@ -21,10 +21,12 @@ app.use(helmet());
 // Use 'dev' format for concise, color-coded console logs
 app.use(morgan('dev')); 
 
-// const server = createServer(app);
-const server = http.createServer(app);
 
-const io = new Server(server);
+/** Server Handling */
+const httpServer = http.createServer(app);
+
+/** Start Socket */
+new ServerSocket(httpServer);
 
 const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -51,11 +53,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser());
 
 const PORT: number | string = 1337;
-
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
 
 app.listen(PORT, () => {
   console.log(
