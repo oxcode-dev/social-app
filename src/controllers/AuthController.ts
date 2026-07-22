@@ -78,6 +78,7 @@ export const userLogin = async (req: express.Request, res: express.Response) => 
     
     return res.status(201).json({
         token,
+        success: true,
         user: {
             id: user._id,
             email: user.email,
