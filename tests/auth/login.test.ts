@@ -5,9 +5,23 @@ import bcrypt from "bcryptjs";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
+import { IUser } from "../../src/types/index.ts";
 
+// Intercept the model module
+vi.mock('../../src/models/user.ts', () => {
+    return {
+        User: {
+            findOne: vi.fn(),
+            create: vi.fn(),
+        },
+    };
+});
 
 describe("Login", () => {
+
+    beforeEach(() => {
+        vi.clearAllMocks(); // Clear tracking between tests
+    });
 
     let req , res;
 
@@ -22,6 +36,7 @@ describe("Login", () => {
             json: vi.fn(),
         };
     });
+
     const endpoint = "/api/auth/login";
 
     const payload = {
@@ -44,7 +59,8 @@ describe("Login", () => {
 
     it("should login an existing user with valid credentials", async () => {
         // Mock the database to return a valid user payload
-        User.findOne.mockResolvedValue({
+        // Define what the mocked function should return
+        let mockUser :IUser = {
             email: 'test@example.com',
             password: 'correctpassword123',
             first_name: "Samuel",
@@ -53,15 +69,18 @@ describe("Login", () => {
             id: "123456789",
             _id: "123456789",
             fullName: "Samuel John",
-            // email: "sam@example.com",
-            // password: "Password123!"
-        });
+            saved: [],
+            followers: [],
+            followings: [],
+            bio: "",
+        }
+        vi.mocked(User.findOne).mockResolvedValue(mockUser);
 
         const response = await request(app)
             .post(endpoint)
             .send(payload);
 
-        console.log(response.body)
+        console.log(response)
 
         expect(response.status).toBe(201);
 
