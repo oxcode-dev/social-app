@@ -7,6 +7,7 @@ import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
 import { IUser } from "../../src/types/index.ts";
 import { fetchUserByEmail } from "../../src/services/userServices.ts";
+import { registerUserTest } from "../helpers/auth.ts";
 
 // Intercept the model module
 vi.mock('../../src/models/user.ts', () => {
@@ -46,11 +47,11 @@ describe("Login", () => {
     };
 
     it('should return 400 if email or password is missing', async () => {
+        await registerUserTest()
         const response = await request(app)
             .post(endpoint)
             .send({
                 email: "sam@example.com",
-                // password: "Password123!"
             });
 
         expect(response.status).toBe(400);
