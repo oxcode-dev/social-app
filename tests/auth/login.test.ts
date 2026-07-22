@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
 import { IUser } from "../../src/types/index.ts";
+import { fetchUserByEmail } from "../../src/services/userServices.ts";
 
 // Intercept the model module
 vi.mock('../../src/models/user.ts', () => {
@@ -60,27 +61,30 @@ describe("Login", () => {
     it("should login an existing user with valid credentials", async () => {
         // Mock the database to return a valid user payload
         // Define what the mocked function should return
-        let mockUser :IUser = {
-            email: 'test@example.com',
-            password: 'correctpassword123',
-            first_name: "Samuel",
-            last_name: "John",
-            username: "sam_john",
-            id: "123456789",
-            _id: "123456789",
-            fullName: "Samuel John",
-            saved: [],
-            followers: [],
-            followings: [],
-            bio: "",
-        }
-        vi.mocked(User.findOne).mockResolvedValue(mockUser);
+        // let mockUser :IUser = {
+        //     email: 'test@example.com',
+        //     password: 'correctpassword123',
+        //     first_name: "Samuel",
+        //     last_name: "John",
+        //     username: "sam_john",
+        //     id: "123456789",
+        //     _id: "123456789",
+        //     fullName: "Samuel John",
+        //     saved: [],
+        //     followers: [],
+        //     followings: [],
+        //     bio: "",
+        // }
+        // vi.mocked(User.findOne).mockResolvedValue(mockUser);
+
+        // const result = await fetchUserByEmail(mockUser.email);
+
 
         const response = await request(app)
             .post(endpoint)
             .send(payload);
 
-        console.log(response)
+        console.log(response.error)
 
         expect(response.status).toBe(201);
 

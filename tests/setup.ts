@@ -2,14 +2,25 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import  { beforeAll, afterAll, afterEach } from "vitest";
 import { MONGO_URI } from "../src/config";
+import supertest, { SuperTest, Test } from "supertest";
+import app from "../src";
+import { Server } from 'http';
 
 let mongo: MongoMemoryServer;
+let server: Server;
+let request: any // SuperTest<Test>;
 
 beforeAll(async () => {
 
     mongo = await MongoMemoryServer.create();
 
     await mongoose.connect(MONGO_URI);
+
+    server = app.listen(0);
+
+    request = supertest(app);
+
+    console.log(`MongoDB connected to ${MONGO_URI}`);
     // await mongoose.connect(mongo.getUri());
 
 });
@@ -33,3 +44,4 @@ afterAll(async () => {
     await mongo.stop();
 
 });
+

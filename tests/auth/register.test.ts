@@ -44,6 +44,8 @@ describe("Register", () => {
             email: payload.email
         }).select("+password");
 
+        console.log(user)
+
         expect(user).not.toBeNull();
 
         const match = await bcrypt.compare(
