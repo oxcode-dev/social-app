@@ -20,7 +20,6 @@ beforeAll(async () => {
 
     request = supertest(app);
 
-    console.log(`MongoDB connected to ${MONGO_URI}`);
     // await mongoose.connect(mongo.getUri());
 
 });
