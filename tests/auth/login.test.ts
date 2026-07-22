@@ -7,7 +7,7 @@ import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
 import { IUser } from "../../src/types/index.ts";
 import { fetchUserByEmail } from "../../src/services/userServices.ts";
-import { registerUserTest } from "../helpers/auth.ts";
+import { deleteUserTest, registerUserTest } from "../helpers/auth.ts";
 
 // Intercept the model module
 vi.mock('../../src/models/user.ts', () => {
@@ -43,7 +43,7 @@ describe("Login", () => {
 
     it("should login an existing user with valid credentials", async () => {
 
-        await registerUserTest()
+        const user = await registerUserTest()
 
         const response = await request(app)
             .post(endpoint)
@@ -54,6 +54,8 @@ describe("Login", () => {
         expect(response.body.success).toBe(true);
 
         expect(response.body.user.email).toBe(payload.email);
+
+        await deleteUserTest(user.token)
 
     });
 
