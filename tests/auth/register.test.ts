@@ -15,7 +15,7 @@ describe("Register", () => {
     const payload = {
         first_name: "Samuel",
         last_name: "John",
-        username: "sam_john",
+        username: "sam_john29",
         email: "sam_reg@example.com",
         password: "Password123!"
     };

@@ -52,7 +52,5 @@ export async function logoutUserTest(token: string) {
         .set("Authorization", `Bearer ${token}`)
         // .send();
 
-    console.log(response.error)
-
     return response.body;
 }

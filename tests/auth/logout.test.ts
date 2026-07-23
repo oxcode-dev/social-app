@@ -21,7 +21,7 @@ describe("Logout", () => {
 
         // expect(response.body.user.email).toBe(payload.email);
 
-        await deleteUserTest(user.token)
+        // await deleteUserTest(user.token)
 
     });
 })
