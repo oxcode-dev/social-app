@@ -1,7 +1,4 @@
-// tests/auth/register.test.ts
-
 import request from "supertest";
-import bcrypt from "bcryptjs";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
 import { deleteUserTest, registerUserTest } from "../helpers/auth.ts";
