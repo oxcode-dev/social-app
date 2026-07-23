@@ -39,7 +39,7 @@ app.use(cors(corsOptions));
 
 app.use(rateLimiter({
   windowMs: 1 * 60 * 1000, // 1 minutes
-  max: 5, // Reduce to 50 requests
+  max: 20, // Reduce to 50 requests
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => req.path === '/health' // Skip health checks

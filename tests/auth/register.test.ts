@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { describe, it, expect } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
+import { deleteUserTest } from "../helpers/auth.ts";
 
 
 describe("Register", () => {
@@ -15,7 +16,7 @@ describe("Register", () => {
         first_name: "Samuel",
         last_name: "John",
         username: "sam_john",
-        email: "sam@example.com",
+        email: "sam_reg@example.com",
         password: "Password123!"
     };
 
@@ -25,7 +26,7 @@ describe("Register", () => {
             .post(endpoint)
             .send(payload);
 
-        // console.log(response.status)
+        console.log(response.body)
 
         expect(response.status).toBe(201);
 
@@ -33,6 +34,8 @@ describe("Register", () => {
 
         expect(response.body.user.email)
             .toBe(payload.email);
+
+        await deleteUserTest(response.body.token)
 
     });
 
