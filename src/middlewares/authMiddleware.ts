@@ -13,22 +13,22 @@ export interface DataStoredInToken {
 const auth = async (req: any, res: express.Response, next: express.NextFunction)  => {
     const authHeader = req.headers['authorization'];
 
-    // if(!authHeader || !authHeader.startsWith('Bearer ')) {
-    //     return res.status(401).json({ message: 'Kindly login to access this resource' });
-    // }
+    if(!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Kindly login to access this resource' });
+    }
 
-    // const token : string = authHeader.split(' ')[1] || '';
-    const token : string = '';
+    const token : string = authHeader.split(' ')[1] || '';
+    // const token : string = '';
 
     try {
         
-        // const decoded = jwt.verify(
-        //     token,
-        //     JWT_SECRET
-        // ) as DataStoredInToken;
+        const decoded = jwt.verify(
+            token,
+            JWT_SECRET
+        ) as DataStoredInToken;
 
-        req.user = await User.findById('699f80cf00d4b770db122aa5').select('-password');
-        // req.user = await User.findById(decoded.id).select('-password');
+        // req.user = await User.findById('699f80cf00d4b770db122aa5').select('-password');
+        req.user = await User.findById(decoded.id).select('-password');
         // req.user = decoded;
         
 

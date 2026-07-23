@@ -103,7 +103,8 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
         {
             message: "Logged out successfully",
             success: true
-        });
+        }
+    );
 };
 
 export const refreshToken = async (req: express.Request, res: express.Response) => {

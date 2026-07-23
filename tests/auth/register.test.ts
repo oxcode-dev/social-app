@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 import { describe, it, expect } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
-import { deleteUserTest } from "../helpers/auth.ts";
 
 
 describe("Register", () => {

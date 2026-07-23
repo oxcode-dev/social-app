@@ -37,12 +37,13 @@ describe("Login", () => {
 
     it("should login an existing user with valid credentials", async () => {
 
-        // const user = await registerUserTest()
         await logoutUserTest(user.token)
 
         const response = await request(app)
             .post(endpoint)
             .send(payload);
+        
+        // console.log(response.error)
 
         expect(response.status).toBe(201);
 
