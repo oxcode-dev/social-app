@@ -108,14 +108,11 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
 
 export const refreshToken = async (req: express.Request, res: express.Response) => {
     const refresh_token = req.cookies['refreshtoken']
-    // console.log("Received refresh token: ", refresh_token);
-    // console.log('All Cookies:', JSON.stringify(req.cookies));
     
     if (!refresh_token) {
         return res.status(400).json({ msg: "Please login again." });
     }
 
-    // const result = jwt.verify(refresh_token, JWT_SECRET) as PayloadType;
     const result = verifyToken(refresh_token)
 
     const user = await fetchUserById(result?.id);
