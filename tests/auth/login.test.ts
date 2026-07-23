@@ -4,9 +4,6 @@ import request from "supertest";
 import bcrypt from "bcryptjs";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
-import { User } from "../../src/models/user.ts";
-import { IUser } from "../../src/types/index.ts";
-import { fetchUserByEmail } from "../../src/services/userServices.ts";
 import { deleteUserTest, registerUserTest } from "../helpers/auth.ts";
 
 // Intercept the model module
