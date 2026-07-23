@@ -25,8 +25,6 @@ describe("Register", () => {
             .post(endpoint)
             .send(payload);
 
-        console.log(response)
-
         expect(response.status).toBe(201);
 
         expect(response.body.success).toBe(true);
@@ -45,8 +43,6 @@ describe("Register", () => {
         const user = await User.findOne({
             email: payload.email
         }).select("+password");
-
-        console.log(user)
 
         expect(user).not.toBeNull();
 
