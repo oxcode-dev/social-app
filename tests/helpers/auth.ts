@@ -9,7 +9,7 @@ const payload = {
     password: "Password123!"
 };
 
-type UserResponse = {
+export type UserResponse = {
     token: string;
     success: boolean;
     message: string; 
@@ -36,8 +36,23 @@ export async function registerUserTest() : Promise<UserResponse> {
 export async function deleteUserTest(token: string) {
 
     const response = await request(app)
-        .post("/api/profile/delete-account")
-        .send(token);
+        .delete("/api/profile/delete-account")
+        .set("Authorization", `Bearer ${token}`)
+        // .send();
+
+    console.log(response.error)
+
+    return response.body;
+}
+
+export async function logoutUserTest(token: string) {
+
+    const response = await request(app)
+        .delete("/api/auth/logout")
+        .set("Authorization", `Bearer ${token}`)
+        // .send();
+
+    console.log(response.error)
 
     return response.body;
 }

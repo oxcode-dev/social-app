@@ -35,7 +35,7 @@ describe("Register", () => {
         expect(response.body.user.email)
             .toBe(payload.email);
 
-        await deleteUserTest(response.body.token)
+        // await deleteUserTest(response.body.token)
 
     });
 

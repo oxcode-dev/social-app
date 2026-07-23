@@ -1,19 +1,18 @@
 import request from "supertest";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
-import { deleteUserTest, registerUserTest } from "../helpers/auth.ts";
+import { deleteUserTest, logoutUserTest, registerUserTest, type UserResponse } from "../helpers/auth.ts";
 
-// Intercept the model module
-vi.mock('../../src/models/user.ts', () => {
-    return {
-        User: {
-            findOne: vi.fn(),
-            create: vi.fn(),
-        },
-    };
-});
 
 describe("Login", () => {
+    let user: UserResponse;
+    beforeEach(async () => {
+
+        const loginUser = await registerUserTest()
+
+        user = loginUser;
+
+    });
 
     const endpoint = "/api/auth/login";
 
@@ -23,7 +22,8 @@ describe("Login", () => {
     };
 
     it('should return 400 if email or password is missing', async () => {
-        const user = await registerUserTest()
+        await logoutUserTest(user.token)
+
         const response = await request(app)
             .post(endpoint)
             .send({
@@ -32,13 +32,13 @@ describe("Login", () => {
 
         expect(response.status).toBe(400);
         expect(response.body.status).toBeFalsy();
-        // expect(response.body.status).toHaveBeenCalledWith({ error: 'Email and password are required' });
-        await deleteUserTest(user.token) 
+
     });
 
     it("should login an existing user with valid credentials", async () => {
 
-        const user = await registerUserTest()
+        // const user = await registerUserTest()
+        await logoutUserTest(user.token)
 
         const response = await request(app)
             .post(endpoint)
@@ -49,8 +49,6 @@ describe("Login", () => {
         expect(response.body.success).toBe(true);
 
         expect(response.body.user.email).toBe(payload.email);
-
-        await deleteUserTest(user.token)
 
     });
 
