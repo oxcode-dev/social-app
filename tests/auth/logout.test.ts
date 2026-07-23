@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import app from "../../src/index.ts";
-import { deleteUserTest, registerUserTest } from "../helpers/auth.ts";
+import { logoutUserTest, registerUserTest } from "../helpers/auth.ts";
 
 describe("Logout", () => {
 
@@ -19,9 +19,7 @@ describe("Logout", () => {
 
         expect(response.body.success).toBe(true);
 
-        // expect(response.body.user.email).toBe(payload.email);
-
-        // await deleteUserTest(user.token)
+        await logoutUserTest(user.token)
 
     });
 })
