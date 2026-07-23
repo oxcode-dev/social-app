@@ -23,7 +23,7 @@ describe("Login", () => {
     };
 
     it('should return 400 if email or password is missing', async () => {
-        await registerUserTest()
+        const user = await registerUserTest()
         const response = await request(app)
             .post(endpoint)
             .send({
@@ -33,6 +33,7 @@ describe("Login", () => {
         expect(response.status).toBe(400);
         expect(response.body.status).toBeFalsy();
         // expect(response.body.status).toHaveBeenCalledWith({ error: 'Email and password are required' });
+        await deleteUserTest(user.token) 
     });
 
     it("should login an existing user with valid credentials", async () => {
