@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { fetchUserByEmail, fetchUserByEmailForAuth, fetchUserById, storeUser } from '../services/userServices.ts';
 import { clearTokenCookie, createToken, setTokenCookie, verifyToken } from '../utils/jwt.ts';
+import { success } from 'zod';
 
 const MONTH = 30 * 24 * 60 * 60; // in seconds
 
@@ -98,7 +99,11 @@ export const userLogout = async (req: express.Request, res: express.Response) =>
     clearTokenCookie(res, 'refreshtoken');
 
     // Sending success response
-    res.status(201).json({ message: "Logged out successfully" });
+    res.status(201).json(
+        {
+            message: "Logged out successfully",
+            success: true
+        });
 };
 
 export const refreshToken = async (req: express.Request, res: express.Response) => {

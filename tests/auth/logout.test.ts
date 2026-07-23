@@ -17,7 +17,7 @@ describe("Logout", () => {
 
         expect(response.status).toBe(201);
 
-        // expect(response.body.success).toBe(true);
+        expect(response.body.success).toBe(true);
 
         // expect(response.body.user.email).toBe(payload.email);
 
