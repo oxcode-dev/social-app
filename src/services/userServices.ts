@@ -116,3 +116,7 @@ export const unfollowUserSystemByDeletedUser = async (userId: string) => {
 export const deleteUserById = async (userId: string) => {
     return await User.findByIdAndDelete(userId);
 }
+
+export const deleteAllUsers = async () => {
+    await User.deleteMany();
+}
