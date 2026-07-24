@@ -1,8 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { fetchUserByEmail, fetchUserByEmailForAuth, fetchUserById, storeUser } from '../services/userServices.ts';
+import { 
+    fetchUserByEmail, fetchUserByEmailForAuth, fetchUserById, storeUser,
+    fetchUserByEmailOrUsername
+} from '../services/userServices.ts';
 import { clearTokenCookie, createToken, setTokenCookie, verifyToken } from '../utils/jwt.ts';
-import { success } from 'zod';
 
 const MONTH = 30 * 24 * 60 * 60; // in seconds
 
@@ -10,7 +12,7 @@ export const userRegistration = async (req: express.Request, res: express.Respon
 
     const { email, password, first_name, last_name, username } = req.body;
 
-    const userExists = await fetchUserByEmail(email);
+    const userExists = await fetchUserByEmailOrUsername(email, username);
 
     if(userExists) {
         return res.status(400).json({ message: 'User already exists' });

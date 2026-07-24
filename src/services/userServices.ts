@@ -2,8 +2,12 @@ import { User } from "../models/user.ts";
 import type { IUser } from "../types/index.ts";
 
 
-export const fetchUserByEmail = async (email: string) => {
+export const fetchUserByEmail = async (email: string, username: string) => {
     return await User.findOne({ email });
+}
+
+export const fetchUserByEmailOrUsername = async (email: string, username: string) => {
+    return await User.find({ $or: [{ email: email }, { username: username }] });
 }
 
 export const fetchUserByEmailForAuth = async (email: string) => {
