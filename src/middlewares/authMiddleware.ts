@@ -19,7 +19,6 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
 
     const token : string = authHeader.split(' ')[1] || '';
 
-    // console.log(token)
     // const token : string = '';
 
     try {

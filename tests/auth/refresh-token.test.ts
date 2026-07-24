@@ -7,23 +7,21 @@ import { deleteUserTest, logoutUserTest, registerUserTest, type UserResponse } f
 describe("Refresh Token", () => {
     let user: UserResponse;
     beforeEach(async () => {
-
         const loginUser = await registerUserTest()
 
         user = loginUser;
-
     });
 
     const endpoint = "/api/auth/refresh-token";
 
-    it('should check if refresh is not valid', async () => {
+    it('should check if refresh token is not valid', async () => {
         await logoutUserTest(user.token)
 
         const response = await request(app)
             .post(endpoint)
             .set("Authorization", `Bearer ${user.token}`);
 
-        console.log(response.body)
+        // console.log(response.body, response.error)
 
         expect(response.status).toBe(400);
         expect(response.body.status).toBeFalsy();

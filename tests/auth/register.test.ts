@@ -12,7 +12,7 @@ describe("Register", () => {
 
     const endpoint = "/api/auth/register";
 
-    const hashedPassword = async() => await bcrypt.hash("Password123!", 12);
+    // const hashedPassword = async() => await bcrypt.hash("Password123!", 12);
 
     const payload = {
         first_name: "Samuel",
@@ -26,8 +26,8 @@ describe("Register", () => {
 
     it("should reject duplicate email", async () => {
 
-        await User.create(payload);
-        // await storeUser(payload)
+        // await User.create(payload);
+        await storeUser(payload)
 
         const response = await request(app)
             .post(endpoint)
@@ -64,7 +64,7 @@ describe("Register", () => {
             email: payload.email
         }).select("+password");
 
-        console.log(user)
+        // console.log(user)
 
         expect(user).not.toBeNull();
 
