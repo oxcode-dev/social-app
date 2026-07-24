@@ -11,6 +11,8 @@ import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
 import { notificationRouter } from './notificationRoute.ts';
 import { getDatabaseConnection } from '../config/database.ts';
+import { DB } from '../database/DB.ts';
+import { getAllData, getAllDataWhere } from '../database/sqlCalls.ts';
 
 const routes = (app: express.Application) => {
     app.use('/api/auth', authRouter)
@@ -49,10 +51,18 @@ const routes = (app: express.Application) => {
         // res.status(200).json({ 'posts': posts })
 
         try {
-            const db = await getDatabaseConnection();
-            console.log(db)
-            const cars = await db.all('SELECT * FROM cars');
-            res.json(cars);
+            // const db = await getDatabaseConnection();
+            // const cars = await db.all('SELECT * FROM cars');
+
+            // const db = new DB()
+            // const cars = db.getAllData('cars')
+
+            const cars = await getAllData('cars')
+            const car = await getAllDataWhere('cars', 1)
+
+            
+
+            res.json(car[0]);
         } catch (error) {
             res.status(500).json({ error: 'Database query failed' });
         }
