@@ -2,22 +2,40 @@
 
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import app from "../../src/index.ts";
 import { User } from "../../src/models/user.ts";
+import { storeUser } from "../../src/services/userServices.ts";
 
 
 describe("Register", () => {
 
     const endpoint = "/api/auth/register";
 
+    const hashedPassword = async() => await bcrypt.hash("Password123!", 12);
+
     const payload = {
         first_name: "Samuel",
         last_name: "John",
         username: "sam_john29",
         email: "sam_reg@example.com",
+        // password: hashedPassword,
         password: "Password123!"
+
     };
+
+    it("should reject duplicate email", async () => {
+
+        await User.create(payload);
+        // await storeUser(payload)
+
+        const response = await request(app)
+            .post(endpoint)
+            .send(payload);
+
+        expect(response.status).toBe(400);
+
+    });
 
     it("should register a new user", async () => {
 
@@ -46,6 +64,8 @@ describe("Register", () => {
             email: payload.email
         }).select("+password");
 
+        console.log(user)
+
         expect(user).not.toBeNull();
 
         const match = await bcrypt.compare(
@@ -54,18 +74,6 @@ describe("Register", () => {
         );
 
         expect(match).toBe(true);
-
-    });
-
-    it("should reject duplicate email", async () => {
-
-        await User.create(payload);
-
-        const response = await request(app)
-            .post(endpoint)
-            .send(payload);
-
-        expect(response.status).toBe(400);
 
     });
 

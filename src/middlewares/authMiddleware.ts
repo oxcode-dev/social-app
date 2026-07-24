@@ -18,6 +18,8 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
     }
 
     const token : string = authHeader.split(' ')[1] || '';
+
+    // console.log(token)
     // const token : string = '';
 
     try {
@@ -34,7 +36,6 @@ const auth = async (req: any, res: express.Response, next: express.NextFunction)
 
         next();
     } catch (error) {
-        // console.error("Token verification error: ", error || 'Server error');
         res.status(401).json({ message: "User Logged out" });
     }
 }

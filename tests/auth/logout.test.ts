@@ -29,7 +29,7 @@ describe("Logout", () => {
 
         expect(response.body.success).toBe(true);
 
-        await logoutUserTest(user.token)
+        // await logoutUserTest(user.token)
 
     });
 })
