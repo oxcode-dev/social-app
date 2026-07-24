@@ -10,7 +10,7 @@ export async function getDatabaseConnection(): Promise<Database> {
 
     // Opens the SQLite file (creates it automatically if it does not exist)
     dbInstance = await open({
-        filename: './database.sqlite3',
+        filename: './src/database/database.sqlite3',
         driver: sqlite3.Database
     });
 
@@ -23,7 +23,7 @@ export async function getDatabaseConnection(): Promise<Database> {
         )
     `);
 
-    console.log('📦 SQLite database connected and initialized.');
+    // console.log('📦 SQLite database connected and initialized.');
 
     return dbInstance;
 }
