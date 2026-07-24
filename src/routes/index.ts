@@ -58,13 +58,13 @@ const routes = (app: express.Application) => {
             // const cars = db.getAllData('cars')
 
             const cars = await getAllData('cars')
-            const car = await getAllDataWhere('cars', 1)
+            const car = await getAllDataWhere('cars', `id = ${3}`)
 
             
 
-            res.json(car[0]);
+            res.json(car);
         } catch (error) {
-            res.status(500).json({ error: 'Database query failed' });
+            res.status(500).json({ error: 'Database query failed ' + error });
         }
     })
 }

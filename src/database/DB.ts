@@ -25,9 +25,6 @@ export class DB {
         return await db.all(
             `SELECT * FROM ${tableName} ORDER BY ${order}`
         );
-        // return (await this.db).all(
-        //     `SELECT * FROM ${tableName} ORDER BY ${order}`
-        // );
     }
 
     async getTotalData(tableName: string): Promise<number> {
