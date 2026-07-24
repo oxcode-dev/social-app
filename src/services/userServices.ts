@@ -118,5 +118,5 @@ export const deleteUserById = async (userId: string) => {
 }
 
 export const deleteAllUsers = async () => {
-    await User.deleteMany();
+    await User.deleteMany({});
 }

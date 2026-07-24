@@ -10,7 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors"
 import { ServerSocket } from "./config/socket.ts";
-// import runSeed from "./db_temp.ts";
+import runSeed from "./db_temp.ts";
 
 const app: Application = express();
 
@@ -85,9 +85,9 @@ export default app;
 
 
 // runSeed()
-//     .then(() => {
-//         console.log('Seeding completed successfully.');
-//     })
-//     .catch((error) => {
-//         console.error('Error during seeding:', error);
-//     });
+//   .then(() => {
+//     console.log('Seeding completed successfully.');
+//   })
+//   .catch((error) => {
+//     console.error('Error during seeding:', error);
+//   });
