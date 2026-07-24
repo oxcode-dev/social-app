@@ -12,7 +12,7 @@ import { deleteChatsByUserId } from '../services/conversationService.ts';
 export const getUserDetails = async (req: RequestWithUser, res: express.Response) => {
     const auth = req?.user
 
-    const user = await fetchUserById(auth?.id)
+    const user = await fetchUserById(auth?._id)
 
     if (!user) {
         res.status(400).json({ msg: "User does not exist." });
