@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 .env
 ./src/db_temp.ts
+/src/db_temp.ts
