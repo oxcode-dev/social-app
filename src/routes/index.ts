@@ -10,9 +10,7 @@ import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
 import { notificationRouter } from './notificationRoute.ts';
-import { getDatabaseConnection } from '../config/database.ts';
-import { DB } from '../database/DB.ts';
-import { getAllData, getAllDataWhere } from '../database/sqlCalls.ts';
+
 
 const routes = (app: express.Application) => {
     app.use('/api/auth', authRouter)
@@ -25,44 +23,12 @@ const routes = (app: express.Application) => {
     app.use('/api/notifications', notificationRouter)
 
     app.get('/api/test', async (req, res) => {
-        // console.log(req.app);
-        // console.log(req.app.get("io"));
-        // const post = await Post.findOne({
-        //     'postedBy': '699f80cf00d4b770db122aa5'
-        // })
-
-        // await createNotification({
-
-        //     io: req.app.get("io"),
-
-        //     recipient: post?.postedBy || '',
-
-        //     sender: '699f80cf00d4b770db122aa5',
-
-        //     type: "COMMENT",
-
-        //     post: post.id,
-        // });
-        // res.status(200).json({ message: 'Testing API routes' })
-
-        // const posts = await Post.find({
-        //     'postedBy': '699f80cf00d4b770db122aa5'
-        // })
-        // res.status(200).json({ 'posts': posts })
 
         try {
-            // const db = await getDatabaseConnection();
-            // const cars = await db.all('SELECT * FROM cars');
 
-            // const db = new DB()
-            // const cars = db.getAllData('cars')
+            // const users = await prisma.user.findMany();  
 
-            const cars = await getAllData('cars')
-            const car = await getAllDataWhere('cars', `id = ${3}`)
-
-            
-
-            res.json(car);
+            // res.json(users);
         } catch (error) {
             res.status(500).json({ error: 'Database query failed ' + error });
         }
