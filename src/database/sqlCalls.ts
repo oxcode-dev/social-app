@@ -2,7 +2,7 @@ import { getDatabaseConnection } from "../config/database.ts";
 
 export const getAllData = async(tableName: string) => {
     const db = await getDatabaseConnection();
-    return await db.all('SELECT * FROM cars');
+    return await db.all(`SELECT * FROM ${tableName}`);
 }
 
 export const getAllDataWhere = async (
@@ -62,15 +62,13 @@ export const addData = async (
 ) => {
     const db = await getDatabaseConnection();
     const fields = Object.keys(data);
-    const values = fields.map(field => `:${field}`);
+    const values = Object.values(data).map(field => `${field}`);
 
-    const sql = `
-        INSERT INTO ${tableName}
-        (${fields.join(",")})
-        VALUES (${values.join(",")})
-    `;
+    const questionMarksArray = Array.from({ length: values.length }, () => '?');
 
-    return await db.run(sql, data)
+    const sql = `INSERT INTO ${tableName} (${fields.join(", ")}) VALUES (${questionMarksArray.join(", ")})`;
+
+    return await db.run(sql, values)
 }
 
 export const updateData = async(

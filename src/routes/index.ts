@@ -10,6 +10,7 @@ import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
 import { notificationRouter } from './notificationRoute.ts';
+import { addData, getAllData } from '../database/sqlCalls.ts';
 
 
 const routes = (app: express.Application) => {
@@ -26,9 +27,32 @@ const routes = (app: express.Application) => {
 
         try {
 
-            // const users = await prisma.user.findMany();  
+            // const newCar = {
+            //     year: 2019,
+            //     make: "Nissan",
+            //     model: "Micra"
+            // }
 
-            // res.json(users);
+            // const saveCar = await addData('cars', newCar);
+
+            // console.log(saveCar);
+
+            // const cars = await getAllData('cars');
+
+            // return res.json(cars);
+
+            // const newUser = {
+            //     email: "take@care.com",
+            //     name: "Fridday"
+            // }
+
+            // const saveUser = await addData('users', newUser);
+
+            // console.log(saveUser);
+
+            const cars = await getAllData('users');
+
+            return res.json(cars);
         } catch (error) {
             res.status(500).json({ error: 'Database query failed ' + error });
         }

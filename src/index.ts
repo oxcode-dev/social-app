@@ -11,6 +11,7 @@ import morgan from "morgan";
 import cors from "cors"
 import { ServerSocket } from "./config/socket.ts";
 import { getDatabaseConnection } from "./config/database.ts";
+import { startSequelize } from "./config/sequelize.ts";
 // import runSeed from "./db_temp.ts";
 
 const app: Application = express();
@@ -65,6 +66,8 @@ app.listen(PORT, () => {
 });
 
 // connectDB();
+
+startSequelize();
 
 getDatabaseConnection();
 
