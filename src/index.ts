@@ -9,12 +9,17 @@ import http from "http";
 import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors"
+import compression from "compression";
 import { ServerSocket } from "./config/socket.ts";
 // import runSeed from "./db_temp.ts";
 
 const app: Application = express();
 
+app.disable("x-powered-by");
+app.use(compression());
 app.use(express.json());
+
+app.set("trust proxy", 1);
 
 // Use Helmet early in your middleware stack
 app.use(helmet());
