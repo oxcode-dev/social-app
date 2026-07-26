@@ -53,6 +53,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cookieParser());
 
+app.use(
+  express.json({
+    limit: "1mb",
+  })
+);
+
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: "1mb",
+  })
+);
+
 const PORT: number | string = 1337;
 
 app.listen(PORT, () => {

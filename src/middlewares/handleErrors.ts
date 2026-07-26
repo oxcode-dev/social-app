@@ -38,6 +38,13 @@ const errorHandler = (err: any, req: express.Request, res: express.Response, nex
     return res.status(400).json({ message: `Invalid ${err.path}: ${err.value}` });
   }
 
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({
+      success: false,
+      message: "Request payload is too large",
+    });
+  }
+
   res.status(err.statusCode || 500).json({
     message: err.message || "Server error",
   });
