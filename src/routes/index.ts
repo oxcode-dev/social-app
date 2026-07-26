@@ -10,7 +10,6 @@ import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
 import { notificationRouter } from './notificationRoute.ts';
-import { addData, deleteData, getAllData, updateData } from '../database/sqlCalls.ts';
 
 
 const routes = (app: express.Application) => {
@@ -27,40 +26,7 @@ const routes = (app: express.Application) => {
 
         try {
 
-            // const newCar = {
-            //     year: 2019,
-            //     make: "Nissan",
-            //     model: "Micra"
-            // }
-
-            // const saveCar = await addData('cars', newCar);
-
-            // console.log(saveCar);
-
-            // const cars = await getAllData('cars');
-
-            // return res.json(cars);
-
-            const newUser = {
-                email: "take@care.com",
-                name: "Fridday234"
-            }
-
-            const condition = `
-                email = '${newUser.email}',
-                name = '${newUser.name}'
-            `;
-            const key = `id = 1 AND email = 'take@care.com'`
-
-            // const saveUser = await deleteData('users', key);
-            const saveUser = await updateData('users', condition, key);
-            // const saveUser = await addData('users', newUser);
-
-            console.log(saveUser);
-
-            const cars = await getAllData('users', "email, name");
-
-            return res.json(cars);
+          return res.json('Api Testing...');
         } catch (error) {
             res.status(500).json({ error: 'Database query failed ' + error });
         }
