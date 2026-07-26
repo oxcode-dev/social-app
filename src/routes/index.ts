@@ -10,7 +10,7 @@ import { followingsRouter } from './followingsRoute.ts';
 import { Post } from '../models/post.ts';
 import { createNotification } from '../services/notificationService.ts';
 import { notificationRouter } from './notificationRoute.ts';
-import { addData, getAllData } from '../database/sqlCalls.ts';
+import { addData, deleteData, getAllData, updateData } from '../database/sqlCalls.ts';
 
 
 const routes = (app: express.Application) => {
@@ -41,16 +41,24 @@ const routes = (app: express.Application) => {
 
             // return res.json(cars);
 
-            // const newUser = {
-            //     email: "take@care.com",
-            //     name: "Fridday"
-            // }
+            const newUser = {
+                email: "take@care.com",
+                name: "Fridday234"
+            }
 
+            const condition = `
+                email = '${newUser.email}',
+                name = '${newUser.name}'
+            `;
+            const key = `id = 1 AND email = 'take@care.com'`
+
+            // const saveUser = await deleteData('users', key);
+            const saveUser = await updateData('users', condition, key);
             // const saveUser = await addData('users', newUser);
 
-            // console.log(saveUser);
+            console.log(saveUser);
 
-            const cars = await getAllData('users');
+            const cars = await getAllData('users', "email, name");
 
             return res.json(cars);
         } catch (error) {

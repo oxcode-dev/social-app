@@ -1,25 +1,26 @@
 import { getDatabaseConnection } from "../config/database.ts";
 
-export const getAllData = async(tableName: string) => {
+export const getAllData = async(tableName: string, column="*") => {
     const db = await getDatabaseConnection();
-    return await db.all(`SELECT * FROM ${tableName}`);
+    return await db.all(`SELECT ${column} FROM ${tableName}`);
 }
 
 export const getAllDataWhere = async (
     tableName: string,
+    column="*",
     condition: string | number
 ) => {
     const db = await getDatabaseConnection();
     const result = await db.all(
-        `SELECT * FROM ${tableName} WHERE ${condition}`
+        `SELECT ${column} FROM ${tableName} WHERE ${condition}`
     );
     return result.length > 0 ? result[0] : {};
 }
 
-export const getAllDataOrder = async(tableName: string, order: string) => {
+export const getAllDataOrder = async(tableName: string, column="*", order: string) => {
     const db = await getDatabaseConnection();
     return await db.all(
-        `SELECT * FROM ${tableName} ORDER BY ${order}`
+        `SELECT ${column} FROM ${tableName} ORDER BY ${order}`
     );
 }
 
@@ -38,10 +39,10 @@ export const getAllDataInnerJoin = async(tableName: string, otherTable: string, 
     );
 }
 
-export const getPaginatedArticles = async (tableName: string, order: string, start: string, perPage: number) => {
+export const getPaginatedArticles = async (tableName: string, column="*", order: string, start: string, perPage: number) => {
     const db = await getDatabaseConnection();
     return await db.all(
-        `SELECT * FROM ${tableName} ORDER BY ${order} LIMIT ${start}, ${perPage}`
+        `SELECT ${column} FROM ${tableName} ORDER BY ${order} LIMIT ${start}, ${perPage}`
     )
 } 
 

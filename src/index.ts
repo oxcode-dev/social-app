@@ -67,7 +67,7 @@ app.listen(PORT, () => {
 
 // connectDB();
 
-startSequelize();
+// startSequelize();
 
 getDatabaseConnection();
 
