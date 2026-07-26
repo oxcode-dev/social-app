@@ -63,7 +63,7 @@ app.listen(PORT, () => {
   routes(app);
 });
 
-// connectDB();
+connectDB();
 
 export default app;
 
