@@ -88,23 +88,6 @@ connectDB();
 
 export default app;
 
-// io.on("connection", (socket) => {
-//   console.log("A user has connected");
-
-//   socket.on("sendMessage", (message, callback) => {
-//     console.log(`Message received: ${message}`);
-//     io.emit("message", message);
-//     callback();
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("A user has disconnected");
-//   });
-// });
-// import crypto from 'crypto';
-// console.log(crypto.randomBytes(32).toString('hex'))
-
-
 // runSeed()
 //   .then(() => {
 //     console.log('Seeding completed successfully.');
