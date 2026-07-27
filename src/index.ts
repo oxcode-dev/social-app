@@ -11,6 +11,7 @@ import morgan from "morgan";
 import cors from "cors"
 import compression from "compression";
 import { ServerSocket } from "./config/socket.ts";
+import mongoSanitize from "express-mongo-sanitize";
 // import runSeed from "./db_temp.ts";
 
 const app: Application = express();
@@ -27,6 +28,7 @@ app.use(helmet());
 // Use 'dev' format for concise, color-coded console logs
 app.use(morgan('dev')); 
 
+app.use(mongoSanitize());
 
 /** Server Handling */
 const httpServer = http.createServer(app);
@@ -35,13 +37,14 @@ const httpServer = http.createServer(app);
 new ServerSocket(httpServer);
 
 const corsOptions = {
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    credentials: true,
-    origin: (process.env.CLIENT_URL || 'http://localhost:3000').split(','),
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true,
+  origin: (process.env.CLIENT_URL || 'http://localhost:3000').split(','),
 };
 
 app.use(cors(corsOptions));
+
 
 app.use(rateLimiter({
   windowMs: 1 * 60 * 1000, // 1 minutes
