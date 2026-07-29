@@ -68,4 +68,3 @@ userSchema.index({
 }, { unique: true });
 
 export const User = mongoose.model('social_user', userSchema);
-
