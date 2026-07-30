@@ -35,15 +35,10 @@ app.use(mongoSanitize());
 const httpServer = http.createServer(app);
 
 /** Start Socket */
-new ServerSocket(httpServer);
-
-
 const io = new Server(httpServer);
 
-
-
 io.on('connection', socket => {
-    SocketServer(socket);
+  SocketServer(socket);
 })
 
 const corsOptions = {
