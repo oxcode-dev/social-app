@@ -1,8 +1,8 @@
-import { Socket, Server } from 'socket.io';
+import { Socket } from 'socket.io';
 
 const onlineUsers = new Map();
 
-const SocketServer = (socket: Socket) => {
+export const SocketServer = (socket: Socket) => {
 
     socket.on("join", (userId) => {
         onlineUsers.set(userId, socket.id);

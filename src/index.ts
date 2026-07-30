@@ -10,7 +10,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors"
 import compression from "compression";
-import { ServerSocket } from "./config/socket.ts";
+import { SocketServer } from "./config/socket.ts";
+import { Server } from "socket.io";
 import mongoSanitize from "express-mongo-sanitize";
 // import runSeed from "./db_temp.ts";
 
@@ -35,6 +36,15 @@ const httpServer = http.createServer(app);
 
 /** Start Socket */
 new ServerSocket(httpServer);
+
+
+const io = new Server(httpServer);
+
+
+
+io.on('connection', socket => {
+    SocketServer(socket);
+})
 
 const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
